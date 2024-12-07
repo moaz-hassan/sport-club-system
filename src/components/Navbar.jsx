@@ -1,14 +1,17 @@
+/* eslint-disable react/prop-types */
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/4843042_ball_game_play_sport_tennis_icon.png";
 import { useState } from "react";
+import FlowDiv from "./FlowDiv";
 
-function Navbar() {
+function Navbar() {  // {setBodyFlow}
   const [showAside, setShowAside] = useState(false);
   const currentRoute = useLocation();
 
   function showAsideFunction() {
     if (showAside) {
       setShowAside(false);
+      // setBodyFlow(true)
     } else {
       setShowAside(true);
     }
@@ -100,6 +103,7 @@ function Navbar() {
           </li>
         </ul>
         </div>
+        {showAside === true ? <FlowDiv controller={setShowAside}/> :null}
         <i
           onClick={() => {
             showAsideFunction();
@@ -191,6 +195,7 @@ function Navbar() {
           </Link>
         </div>
       </nav>
+      
     </>
   );
 }

@@ -16,70 +16,61 @@ function Login() {
       setErrorMessage("Both fields are required.");
       return;
     }
-    setErrorMessage("");
-  };
-
-  const handleUserNameChange = (e) => {
-    setUserName(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    // setErrorMessage("");
+    // console.log("Logged In:", { userName, password });
   };
 
   return (
     <>
       <Navbar />
-      <form onSubmit={handleSubmit} method="post">
+      <form onSubmit={handleSubmit} className="login-form">
         <h2>Login</h2>
-        <div>
+
+        {errorMessage && <div className="login-error-message">{errorMessage}</div>}
+
+        <div className="login-input-container">
           <input
             type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            required
+            id="login-username"
+            className={`login-input ${userName ? "not-empty" : ""}`}
             value={userName}
-            onChange={(event) => {
-              handleUserNameChange(event);
-            }}
+            onChange={(e) => setUserName(e.target.value)}
+            required
           />
+          <label htmlFor="login-username" className="login-label">
+            Username
+          </label>
         </div>
-        <div style={{ position: "relative" }}>
+
+        <div className="login-input-container">
           <input
             type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            placeholder="Password"
-            required
+            id="login-password"
+            className={`login-input ${password ? "not-empty" : ""}`}
             value={password}
-            onChange={(event) => {
-              handlePasswordChange(event);
-            }}
+            onChange={(e) => setPassword(e.target.value)}
+            required
           />
+          <label htmlFor="login-password" className="login-label">
+            Password
+          </label>
           <i
             className={`fa-regular ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+            onClick={() => setShowPassword((prev) => !prev)}
             style={{
               position: "absolute",
-              right: "12px",
+              right: "10px",
               top: "15px",
               cursor: "pointer",
             }}
-            onClick={() => setShowPassword(!showPassword)}
-          ></i>
-        </div>
-
-        {errorMessage && (
-          <div className="error">
-            {errorMessage}
-          </div>
-        )}
-
-        <div>
-          <input type="submit" value="Login" />
+          />
         </div>
 
         <div>
+          <input type="submit" value="Login" className="login-submit" />
+        </div>
+
+        <div className="login-links">
           <Link to="/sign-up">Register</Link>
           <Link to="/reset-password">Forgot Password</Link>
         </div>

@@ -22,7 +22,7 @@ const Footer = () => {
             <li>Phone: <a href="tel:+123456789">+1 234 567 89</a></li>
           </ul>
         </div>
-        <div className="footer-social">
+        {/* <div className="footer-social">
           <h3>Follow Us</h3>
           <ul>
             <li><a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a></li>
@@ -30,7 +30,7 @@ const Footer = () => {
             <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
             <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
           </ul>
-        </div>
+        </div> */}
       </div>
       <div className="footer-bottom">
         <p>&copy; 2024 SportClub. All Rights Reserved.</p>

@@ -36,4 +36,5 @@ dist/
 
 # Ignore Firebase related files
 .firebase/
+.firebaserc
 firebase.json

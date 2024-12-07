@@ -5,16 +5,146 @@
   font-family: Arial, sans-serif;
   text-decoration: none;
   list-style: none;
+  box-shadow: none;
 }
 
+body {
+  overflow-y: auto !important;
+}
+
+.flow-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff00;
+  z-index: 50;
+}
+
+/* //////////////////// Dynamic Form ///////////////////////////// */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-save-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.modal-save-btn:hover {
+  background-color: #45a049;
+}
+
+.modal-cancel-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.modal-cancel-btn:hover {
+  background-color: #e53935;
+}
+
+button {
+  background-color: #007BFF;
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* //////////////////////////////////////////////// */
 /* //////////////////// Main nav ///////////////////////////// */
 .main-nav {
   height: 60px;
-  padding:0 20px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   overflow: hidden;
+  z-index: 100;
 }
 
 .main-nav .left-aside {
@@ -67,6 +197,7 @@
   background-color: green;
   transition: 0.2s;
 }
+
 .main-nav .left-aside .nav-links li:hover a::after {
   top: 0;
 }
@@ -132,14 +263,13 @@
 .main-nav .nav-links .active-link::after {
   content: "";
   position: absolute;
-  top: -1px;
+  top: 0px;
   left: 0;
   width: 100%;
   height: 3px;
   background-color: green;
   transition: 0.5s;
 }
-
 
 .main-nav .nav-links li:hover a::after {
   left: 0;
@@ -296,14 +426,70 @@
 form {
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   width: 100%;
-  max-width: 400px;
+  max-width: 700px !important;
   box-sizing: border-box;
   margin: 80px auto;
 }
+/*  */
+.sign-up-form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+}
 
+.input-container {
+  position: relative;
+}
+
+.input-container input {
+  width: 100%;
+  height: 60px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  outline: none;
+  background-color: #f1f5f9;
+  color: #333;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.input-container .otp-btn{
+  height: 60px;
+  width: 200px;
+}
+.input-container label {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  font-size: 16px;
+  color: #aaa;
+  pointer-events: none;
+  transform: translateY(-80%);
+  transition: transform 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+}
+
+.input-container input:focus+label,
+.input-container input:not(:placeholder-shown)+label {
+  animation: moveLabelToTop 0.3s forwards;
+}
+
+@keyframes moveLabelToTop {
+  0% {
+    top: 50%;
+    font-size: 16px;
+    color: #aaa;
+    transform: translateY(-50%);
+  }
+
+  100% {
+    top: 20px;
+    font-size: 14px;
+    padding: 4px !important;
+  }
+}
+
+/*  */
 h2 {
   text-align: center;
   color: #333;
@@ -315,10 +501,12 @@ input {
   width: 100%;
   padding: 12px;
   margin-bottom: 15px;
-  border: 2px solid #ddd;
+  border: none !important;
+  background-color: #f1f5f9;
   border-radius: 4px;
   font-size: 16px;
   box-sizing: border-box;
+  transition: 0.5s;
 }
 
 input:focus {
@@ -330,17 +518,20 @@ input::placeholder {
   color: #888;
 }
 
-div.error {
-  color: white;
-  background-color: red;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
+div .error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  font-size: 16px;
   text-align: center;
+  font-weight: bold;
 }
 
 input[type="submit"], button[type="submit"] {
-  background-color: green;
+  background-color: #0284c7;
   color: white;
   border: none;
   padding: 12px;
@@ -350,15 +541,6 @@ input[type="submit"], button[type="submit"] {
   transition: background-color 0.3s;
   width: 100%;
 }
-
-input[type="submit"], button[type="submit"]:hover {
-  background-color: green;
-}
-
-/* input[type="submit"], button[type="submit"]:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-} */
 
 form a {
   text-decoration: none;
@@ -373,6 +555,53 @@ form a:hover {
 }
 
 
+/*////////////////////////// Login form ///////////////////////////*/
+.login-error-message {
+  color: #d9534f;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.login-input-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+  height: 50px;
+}
+
+.login-input {
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f1f5f9;
+  outline: none;
+  transition: 0.5s;
+}
+
+.login-input:focus {
+  padding-top: 20px;
+}
+
+.login-label {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #aaa;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.login-input:focus + .login-label,
+.login-input.not-empty + .login-label {
+  top: 10px;
+  font-size: 0.85rem;
+}
+/*/////////////////////////////////*/
 
 /* //////////////////// Reset Password ////////////////////// */
 form .email-check {
@@ -402,10 +631,12 @@ form .email-check .check-email-btn {
   font-size: 16px;
   cursor: pointer;
 }
-form .password-div{
+
+form .password-div {
   position: relative;
 }
-form .password-div .fa-eye{
+
+form .password-div .fa-eye {
   position: absolute;
   top: 9px;
   right: 0px;
@@ -415,9 +646,11 @@ form .password-div .fa-eye{
   border-radius: 100%;
   cursor: pointer;
 }
-form .password-div .fa-eye:hover{
+
+form .password-div .fa-eye:hover {
   background-color: #ccc;
 }
+
 form .email-check .check-email-btn:hover {
   background-color: rgb(1, 102, 1);
 }
@@ -450,3 +683,73 @@ form .email-check button {
 }
 
 /* /////////////////////////////////////////////// */
+
+
+
+
+
+/* ////// Dynamic Form /////// */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-width: 90%;
+  height: fit-content !important;
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+  margin: 0;
+}
+
+.modal-content form input {
+  margin: 5px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-save-btn,
+.modal-cancel-btn {
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-save-btn {
+  background-color: #28a745;
+  color: white;
+  width: 100px !important;
+}
+
+.modal-cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* /////////////// */

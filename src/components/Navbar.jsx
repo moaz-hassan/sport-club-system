@@ -4,7 +4,8 @@ import logo from "../assets/4843042_ball_game_play_sport_tennis_icon.png";
 import { useState } from "react";
 import FlowDiv from "./FlowDiv";
 
-function Navbar() {  // {setBodyFlow}
+function Navbar() {
+  // {setBodyFlow}
   const [showAside, setShowAside] = useState(false);
   const currentRoute = useLocation();
 
@@ -31,79 +32,79 @@ function Navbar() {  // {setBodyFlow}
             <span>Sport Club</span>
           </div>
           <ul className="nav-links">
-          <li>
-            <Link
-              className={currentRoute.pathname === "/" ? "active-link" : null}
-              to="/"
-              style={
-                currentRoute.pathname === "/"
-                  ? {
-                      backgroundColor: "rgba(238, 238, 238, 0.727)",
-                      overflow: "auto",
-                    }
-                  : null
-              }
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={
-                currentRoute.pathname === "/plans" ? "active-link" : null
-              }
-              to="/plans"
-              style={
-                currentRoute.pathname === "/plans"
-                  ? {
-                      backgroundColor: "rgba(238, 238, 238, 0.727)",
-                      overflow: "auto",
-                    }
-                  : null
-              }
-            >
-              Plans
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={
-                currentRoute.pathname === "/about" ? "active-link" : null
-              }
-              to="/about"
-              style={
-                currentRoute.pathname === "/about"
-                  ? {
-                      backgroundColor: "rgba(238, 238, 238, 0.727)",
-                      overflow: "auto",
-                    }
-                  : null
-              }
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
-              className={
-                currentRoute.pathname === "/contact" ? "active-link" : null
-              }
-              to="/contact"
-              style={
-                currentRoute.pathname === "/contact"
-                  ? {
-                      backgroundColor: "rgba(238, 238, 238, 0.727)",
-                      overflow: "auto",
-                    }
-                  : null
-              }
-            >
-              Contact
-            </Link>
-          </li>
-        </ul>
+            <li>
+              <Link
+                className={currentRoute.pathname === "/" ? "active-link" : null}
+                to="/"
+                style={
+                  currentRoute.pathname === "/"
+                    ? {
+                        backgroundColor: "rgba(238, 238, 238, 0.727)",
+                        overflow: "auto",
+                      }
+                    : null
+                }
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={
+                  currentRoute.pathname === "/plans" ? "active-link" : null
+                }
+                to="/plans"
+                style={
+                  currentRoute.pathname === "/plans"
+                    ? {
+                        backgroundColor: "rgba(238, 238, 238, 0.727)",
+                        overflow: "auto",
+                      }
+                    : null
+                }
+              >
+                Plans
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={
+                  currentRoute.pathname === "/about" ? "active-link" : null
+                }
+                to="/about"
+                style={
+                  currentRoute.pathname === "/about"
+                    ? {
+                        backgroundColor: "rgba(238, 238, 238, 0.727)",
+                        overflow: "auto",
+                      }
+                    : null
+                }
+              >
+                About
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={
+                  currentRoute.pathname === "/contact" ? "active-link" : null
+                }
+                to="/contact"
+                style={
+                  currentRoute.pathname === "/contact"
+                    ? {
+                        backgroundColor: "rgba(238, 238, 238, 0.727)",
+                        overflow: "auto",
+                      }
+                    : null
+                }
+              >
+                Contact
+              </Link>
+            </li>
+          </ul>
         </div>
-        {showAside === true ? <FlowDiv controller={setShowAside}/> :null}
+        {showAside === true ? <FlowDiv controller={setShowAside} /> : null}
         <i
           onClick={() => {
             showAsideFunction();
@@ -128,6 +129,24 @@ function Navbar() {  // {setBodyFlow}
               }
             >
               Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              className={
+                currentRoute.pathname === "/shop" ? "active-link" : null
+              }
+              to="/shop"
+              style={
+                currentRoute.pathname === "/shop"
+                  ? {
+                      backgroundColor: "rgba(238, 238, 238, 0.727)",
+                      overflow: "auto",
+                    }
+                  : null
+              }
+            > 
+              Shop
             </Link>
           </li>
           <li>
@@ -195,7 +214,6 @@ function Navbar() {  // {setBodyFlow}
           </Link>
         </div>
       </nav>
-      
     </>
   );
 }

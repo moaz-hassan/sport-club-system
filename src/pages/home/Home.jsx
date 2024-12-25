@@ -7,6 +7,8 @@ import UpcomingEvents from "./UpComingEvents";
 import TopPrograms from "./TopPrograms";
 import FAQ from "./FAQ";
 import "./home.css";
+import News from "../../components/News";
+import MatchesComponent from "../../components/MatchesComponent";
 // import { useState } from "react";
 
 function HomePage() {
@@ -19,13 +21,17 @@ function HomePage() {
   // }
   return (
     <>
-      <Navbar />  
-      <div className="home-container"> {/* setBodyFlow={setHideFlow} */}
+      <Navbar />
+      <div className="home-container">
+        {" "}
+        {/* setBodyFlow={setHideFlow} */}
         <HeroSection />
         <FeaturesSection />
-        <TopPrograms/>
-        <UpcomingEvents/>
-        <FAQ/>
+        <News />
+        <MatchesComponent />
+        <TopPrograms />
+        <UpcomingEvents />
+        <FAQ />
       </div>
       <Footer />
     </>

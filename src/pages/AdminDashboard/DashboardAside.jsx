@@ -36,6 +36,15 @@ function DashboardAside({ asideShow, setAsideShow }) {
       <ul>
         <li
           style={
+            location.pathname === "/admin-dashboard/profile"
+              ? { backgroundColor: "#4CAF50" }
+              : null
+          }
+        >
+          <Link to="/admin-dashboard/profile">Profile</Link>
+        </li>
+        <li
+          style={
             location.pathname === "/admin-dashboard/overview"
               ? { backgroundColor: "#4CAF50" }
               : null
@@ -45,12 +54,12 @@ function DashboardAside({ asideShow, setAsideShow }) {
         </li>
         <li
           style={
-            location.pathname === "/admin-dashboard/events"
+            location.pathname === "/admin-dashboard/players"
               ? { backgroundColor: "#4CAF50" }
               : null
           }
         >
-          <Link to="/admin-dashboard/events">Events</Link>
+          <Link to="/admin-dashboard/players">Players</Link>
         </li>
         <li
           style={
@@ -70,7 +79,7 @@ function DashboardAside({ asideShow, setAsideShow }) {
         >
           <Link to="/admin-dashboard/subscriptions">Subscriptions</Link>
         </li>
-        <li
+        {/* <li
           style={
             location.pathname === "/admin-dashboard/teams"
               ? { backgroundColor: "#4CAF50" }
@@ -78,9 +87,8 @@ function DashboardAside({ asideShow, setAsideShow }) {
           }
         >
           <Link to="/admin-dashboard/teams">Teams</Link>
-        </li>
+        </li> */}
       </ul>
-      <p className="dashboard-version">Version: 1.0.0</p>
     </aside>
   );
 }

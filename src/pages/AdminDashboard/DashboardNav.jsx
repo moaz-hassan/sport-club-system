@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { FiMenu, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
+import { FiMenu, FiUser, FiLogOut } from "react-icons/fi";
 import logo from "../../assets/4843042_ball_game_play_sport_tennis_icon.png";
 import "./admin-dashboard.css";
+import { Link } from "react-router-dom";
 
 function DashboardNav({ adminName = "Admin", setAsideShow, asideShow }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -42,12 +43,9 @@ function DashboardNav({ adminName = "Admin", setAsideShow, asideShow }) {
         <div className="dropdown">
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <a href="/profile" className="dropdown-item">
+              <Link to="/admin-dashboard/profile" className="dropdown-item">
                 <FiUser /> Profile
-              </a>
-              <a href="/settings" className="dropdown-item">
-                <FiSettings /> Settings
-              </a>
+              </Link>
               <button className="dropdown-item logout">
                 <FiLogOut /> Logout
               </button>

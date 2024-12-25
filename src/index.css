@@ -1,3 +1,7 @@
+/* @import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css"; */
+
+
 * {
   margin: 0;
   padding: 0;
@@ -71,7 +75,7 @@ input[type="email"],
 input[type="tel"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc !important;
   border-radius: 4px;
   font-size: 14px;
   color: #333;
@@ -432,6 +436,7 @@ form {
   box-sizing: border-box;
   margin: 80px auto;
 }
+
 /*  */
 .sign-up-form {
   max-width: 400px;
@@ -454,10 +459,12 @@ form {
   color: #333;
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
-.input-container .otp-btn{
+
+.input-container .otp-btn {
   height: 60px;
   width: 200px;
 }
+
 .input-container label {
   position: absolute;
   top: 50%;
@@ -596,11 +603,12 @@ form a:hover {
   pointer-events: none;
 }
 
-.login-input:focus + .login-label,
-.login-input.not-empty + .login-label {
+.login-input:focus+.login-label,
+.login-input.not-empty+.login-label {
   top: 10px;
   font-size: 0.85rem;
 }
+
 /*/////////////////////////////////*/
 
 /* //////////////////// Reset Password ////////////////////// */
@@ -751,5 +759,189 @@ form .email-check button {
   background-color: #dc3545;
   color: white;
 }
+
+/* /////////////// */
+/* News.css */
+.news-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.main-news {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.main-news-image-container {
+  position: relative;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.main-news-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.main-news-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.main-news-overlay h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+.main-news-overlay p {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.news-date {
+  font-size: 1em;
+  color: #fff;
+  font-weight: 300;
+}
+
+.other-news {
+  margin-top: 20px;
+}
+
+.other-news h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.other-news-list {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.other-news-item {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 15px;
+}
+
+.other-news-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.other-news-content {
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Dark background for the text */
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+}
+
+.other-news-content h4 {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.other-news-content span {
+  font-size: 0.9em;
+  color: #ddd;
+}
+
+
+
+/* Matches Slider Styling */
+.matches-slider {
+  margin-top: 40px;
+}
+
+.matches-slider h3 {
+  font-size: 1.8em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.matches-slider .slider-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  overflow-x: auto;
+}
+
+.match-item {
+  width: 250px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  background-color: #fff;
+}
+
+.match-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.match-info {
+  margin-top: 10px;
+}
+
+.match-info h4 {
+  font-size: 1.2em;
+  color: #333;
+}
+
+.match-info p {
+  margin-top: 10px;
+  color: #666;
+  font-size: 1em;
+}
+
+.match-details-link {
+  display: block;
+  margin-top: 10px;
+  font-size: 1em;
+  color: #1e73be;
+  text-decoration: none;
+}
+
+.match-details-link:hover {
+  text-decoration: underline;
+}
+
 
 /* /////////////// */

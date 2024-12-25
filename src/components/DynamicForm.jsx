@@ -1,26 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function DynamicForm({ formType, api, setStatus }) {
   const [formData, setFormData] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false); // State to manage button enabled/disabled
 
   const addTeamFields = [
     { name: "teamId", placeholder: "Team ID", type: "text", required: true },
-    {
-      name: "teamName",
-      placeholder: "Team Name",
-      type: "text",
-      required: true,
-    },
+    { name: "teamName", placeholder: "Team Name", type: "text", required: true },
     { name: "city", placeholder: "City", type: "text", required: true },
     { name: "location", placeholder: "Location", type: "text", required: true },
-    {
-      name: "members",
-      placeholder: "Number of Members",
-      type: "number",
-      required: true,
-    },
+    { name: "members", placeholder: "Number of Members", type: "number", required: true },
   ];
 
   const addMemberFields = [
@@ -30,28 +21,18 @@ function DynamicForm({ formType, api, setStatus }) {
     { name: "phone", placeholder: "Phone", type: "tel", required: true },
   ];
 
-  const addSubscriptionPlanFields = [
-    {
-      name: "planName",
-      placeholder: "Plan Name",
-      type: "text",
-      required: true,
-    },
-    { name: "price", placeholder: "Price", type: "number", required: true },
-    {
-      name: "duration",
-      placeholder: "Duration (months)",
-      type: "number",
-      required: true,
-    },
-    {
-      name: "features",
-      placeholder: "Features",
-      type: "text",
-      required: false,
-    },
+  const addPlayerFields = [
+    { name: "name", placeholder: "Player Name", type: "text", required: true },
   ];
 
+  const addSubscriptionPlanFields = [
+    { name: "planName", placeholder: "Plan Name", type: "text", required: true },
+    { name: "price", placeholder: "Price", type: "number", required: true },
+    { name: "duration", placeholder: "Duration (months)", type: "number", required: true },
+    { name: "features", placeholder: "Features", type: "text", required: false },
+  ];
+
+  // Function to send data to the API
   function apiReq(api, object) {
     axios({
       headers: {
@@ -69,6 +50,8 @@ function DynamicForm({ formType, api, setStatus }) {
         return addTeamFields;
       case "addMember":
         return addMemberFields;
+      case "addPlayer":
+        return addPlayerFields;
       case "addSubscriptionPlan":
         return addSubscriptionPlanFields;
       default:
@@ -82,13 +65,20 @@ function DynamicForm({ formType, api, setStatus }) {
     setFormData({ ...formData, [name]: value });
   };
 
+  // Check if the form is valid (all required fields are filled)
+  useEffect(() => {
+    const isValid = getFormFields().every((field) => {
+      return field.required ? formData[field.name]?.trim() !== "" : true;
+    });
+    setIsFormValid(isValid);
+  }, [formData]);
+
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
     apiReq(api, formData);
   };
 
-  // Get form fields based on formType
   const formFields = getFormFields();
 
   return (
@@ -105,6 +95,7 @@ function DynamicForm({ formType, api, setStatus }) {
             <div key={field.name} className="form-group">
               <label htmlFor={field.name}>{field.placeholder}</label>
               <input
+                style={{ border: "1px solid black" }}
                 type={field.type || "text"}
                 name={field.name}
                 id={field.name}
@@ -119,9 +110,8 @@ function DynamicForm({ formType, api, setStatus }) {
             <button
               type="submit"
               className="modal-save-btn"
-              onClick={(event) => {
-                handleSubmit(event);
-              }}
+              onClick={handleSubmit}
+              disabled={!isFormValid} // Disable button if form is invalid
             >
               Add
             </button>

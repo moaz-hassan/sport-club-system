@@ -1,15 +1,37 @@
+import MembersChart from "./overviewCompnents/MembersChart";
+import SubscriptionChart from "./overviewCompnents/SubscriptionChart";
+import DashboardMembers from "./DashboardMembers";
+import Players from "./Players";
+
 function DashboardOverview() {
-    return (
-      <div className="dashboard-teams-container">
-        <div className="header">
-          <h2>Teams</h2>
-          <button className="add-team-btn">Add Team</button>
-          <button className="filter-teams-btn">Filter Teams</button>
-          <input type="search" name="" id="" placeholder="Search for teams" />
+  return (
+    <div className="dashboard-overview-container">
+      <div className="top-section">
+        <div>
+          <span>Total Revenue</span>
+          <p>100$</p>
+        </div>
+        <div>
+          <span>Total Subscriptions</span>
+          <p>50</p>
+        </div>
+        <div>
+          <span>Total Members</span>
+          <p>200</p>
+        </div>
+        <div>
+          <span>Total Members</span>
+          <p>200</p>
         </div>
       </div>
-    );
-  }
-  
-  export default DashboardOverview;
-  
+      <div className="admin-analysis">
+        <SubscriptionChart />
+        <MembersChart />
+        <DashboardMembers memberView={true}/>
+        <Players memberView={true}/>
+      </div>
+    </div>
+  );
+}
+
+export default DashboardOverview;

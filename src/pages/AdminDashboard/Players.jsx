@@ -5,7 +5,7 @@ import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
 import { Link } from "react-router-dom";
 
-function DashboardMembers({ memberView }) {
+function DashboardPlayers({ memberView }) {
   const members = [
     {
       id: 1,
@@ -34,10 +34,6 @@ function DashboardMembers({ memberView }) {
   const HeaderRowObject = [
     { header: "Member Id", key: "id", width: 10 },
     { header: "Member Name", key: "name", width: 25 },
-    { header: "Email", key: "email", width: 30 },
-    { header: "Phone Number", key: "phoneNumber", width: 20 },
-    { header: "Subscription Status", key: "subscriptionStatus", width: 20 },
-    { header: "Role", key: "role", width: 15 },
     { header: "Status", key: "status", width: 15 },
   ];
 
@@ -55,7 +51,7 @@ function DashboardMembers({ memberView }) {
   function SearchFunc(event) {
     const searchInput = event.target;
     const SearchElements = document.querySelectorAll(
-      `${event.target} tbody tr .dashboard-search-element`
+      ".dashboard-members-table tbody tr .dashboard-search-element"
     );
     const searchValue = searchInput.value;
     for (let i = 0; i < SearchElements.length; i++) {
@@ -80,7 +76,7 @@ function DashboardMembers({ memberView }) {
       className="dashboard-members-wrapper"
       style={memberView !== false ? { margin: "0" } : null}
     >
-      <h2>Members</h2>
+      <h2 style={memberView !== false ? { marginBottom: "30px" } : null}>Players</h2>
       <div className="dashboard-members-header">
         <div className="search-div">
           <input
@@ -99,17 +95,10 @@ function DashboardMembers({ memberView }) {
           >
             <option value="id">Id</option>
             <option value="name">Name</option>
-            <option value="email">Email</option>
-            <option value="phone-number">Phone Number</option>
-            <option value="subscription-status">Subscription Status</option>
-            <option value="role">Role</option>
             <option value="status">Status</option>
           </select>
         </div>
-        {memberView === true && (
-          <Link to="/admin-dashboard/members">See more</Link>
-        )}
-
+        {memberView === true && (<Link to="/admin-dashboard/players">See more</Link>)}
         {memberView === false && (
           <div className="dashboard-members-controls">
             <button
@@ -118,7 +107,7 @@ function DashboardMembers({ memberView }) {
                 setAddMember(true);
               }}
             >
-              Add Member
+              Add Player
             </button>
             <ExportExcelSheet
               FileName="Members"
@@ -132,14 +121,10 @@ function DashboardMembers({ memberView }) {
         <table className="dashboard-members-table">
           <thead>
             <tr>
-              <th>Member Id</th>
-              <th>Member Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Subscription Status</th>
-              <th>Role</th>
+              <th>Player Id</th>
+              <th>Player Name</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Match Plan</th>
             </tr>
           </thead>
           <tbody>
@@ -158,38 +143,6 @@ function DashboardMembers({ memberView }) {
                   }
                 >
                   {member.name}
-                </td>
-                <td
-                  className={
-                    searchSelect === "email" ? "dashboard-search-element" : null
-                  }
-                >
-                  {member.email}
-                </td>
-                <td
-                  className={
-                    searchSelect === "phone-number"
-                      ? "dashboard-search-element"
-                      : null
-                  }
-                >
-                  {member.phoneNumber}
-                </td>
-                <td
-                  className={
-                    searchSelect === "subscription-status"
-                      ? "dashboard-search-element"
-                      : null
-                  }
-                >
-                  {member.subscriptionStatus}
-                </td>
-                <td
-                  className={
-                    searchSelect === "role" ? "dashboard-search-element" : null
-                  }
-                >
-                  {member.role}
                 </td>
                 <td
                   className={
@@ -216,9 +169,8 @@ function DashboardMembers({ memberView }) {
                     }
                   >
                     <option value="">Select Action</option>
-                    <option value="makeAdmin">Make Admin</option>
-                    <option value="block">Block</option>
-                    <option value="makeCoach">Make Coach</option>
+                    <option value="start">In the starting lineup</option>
+                    <option value="sub">substitution</option>
                   </select>
                 </td>
               </tr>
@@ -227,10 +179,10 @@ function DashboardMembers({ memberView }) {
         </table>
       </div>
       {addMember === true ? (
-        <DynamicForm setStatus={setAddMember} api="" formType="addMember" />
+        <DynamicForm setStatus={setAddMember} api="" formType="addPlayer" />
       ) : null}
     </div>
   );
 }
 
-export default DashboardMembers;
+export default DashboardPlayers;

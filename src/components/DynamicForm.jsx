@@ -7,18 +7,26 @@ function DynamicForm({ formType, api, setStatus }) {
   const [isFormValid, setIsFormValid] = useState(false); // State to manage button enabled/disabled
 
   const addTeamFields = [
-    { name: "teamId", placeholder: "Team ID", type: "text", required: true },
-    { name: "teamName", placeholder: "Team Name", type: "text", required: true },
-    { name: "city", placeholder: "City", type: "text", required: true },
-    { name: "location", placeholder: "Location", type: "text", required: true },
-    { name: "members", placeholder: "Number of Members", type: "number", required: true },
+    { name: "team_name", placeholder: "Team Name", type: "text", required: true },
+    { name: "team_type", placeholder: "Team ID", type: "text", required: true },
   ];
+  const addMatchFields = [
+    { name: "match_date", placeholder: "Match Date", type: "date", required: true },
+    { name: "match_location", placeholder: "Location", type: "text", required: true },
+    { name: "match_team1", placeholder: "Team 1", type: "text", required: true },
+    { name: "match_team2", placeholder: "Team 2", type: "text", required: true },
+    { name: "match_time", placeholder: "Match Time", type: "time", required: true },
+    { name: "match_champion", placeholder: "Champion", type: "text", required: true },
+  ];
+  
 
   const addMemberFields = [
     { name: "name", placeholder: "Member Name", type: "text", required: true },
     { name: "role", placeholder: "Role", type: "text", required: true },
     { name: "email", placeholder: "Email", type: "email", required: true },
     { name: "phone", placeholder: "Phone", type: "tel", required: true },
+    { name: "birth", placeholder: "Birth date", type: "date", required: true },
+    { name: "password", placeholder: "Password", type: "password", required: true },
   ];
 
   const addPlayerFields = [
@@ -28,8 +36,7 @@ function DynamicForm({ formType, api, setStatus }) {
   const addSubscriptionPlanFields = [
     { name: "planName", placeholder: "Plan Name", type: "text", required: true },
     { name: "price", placeholder: "Price", type: "number", required: true },
-    { name: "duration", placeholder: "Duration (months)", type: "number", required: true },
-    { name: "features", placeholder: "Features", type: "text", required: false },
+    { name: "type", placeholder: "Type", type: "text", required: true },
   ];
 
   // Function to send data to the API
@@ -48,6 +55,8 @@ function DynamicForm({ formType, api, setStatus }) {
     switch (formType) {
       case "addTeam":
         return addTeamFields;
+        case "addMatch":
+        return addMatchFields;
       case "addMember":
         return addMemberFields;
       case "addPlayer":

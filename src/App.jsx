@@ -23,7 +23,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/match-details/:matchId" element={<MatchDetails />} />
         <Route path="/admin-dashboard/overview" element={<AdminDashboard />} />
-        {/* <Route path="/admin-dashboard/teams" element={<AdminDashboard />} /> */}
+        <Route path="/admin-dashboard/teams" element={<AdminDashboard />} />
+        <Route path="/admin-dashboard/matches" element={<AdminDashboard />} />
         <Route path="/admin-dashboard/members" element={<AdminDashboard />} />
         <Route path="/admin-dashboard/players" element={<AdminDashboard />} />
         <Route

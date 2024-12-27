@@ -3,27 +3,66 @@ import "./admin-dashboard.css";
 import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
 
-function DashboardTeams() {
-  const teams = [
-    { teamId: 1, teamName: "Falcon Warriors", teamType: "A" },
-    { teamId: 2, teamName: "Ocean Explorers", teamType: "B" },
-    { teamId: 3, teamName: "Mountain Climbers", teamType: "C" },
-    { teamId: 4, teamName: "Desert Rangers", teamType: "A" },
-    { teamId: 5, teamName: "Sky Flyers", teamType: "B" },
-    { teamId: 6, teamName: "Tech Titans", teamType: "C" },
-    { teamId: 7, teamName: "River Riders", teamType: "A" },
-    { teamId: 8, teamName: "Forest Rangers", teamType: "B" },
-    { teamId: 9, teamName: "Polar Explorers", teamType: "C" },
-    { teamId: 10, teamName: "Sunset Surfers", teamType: "A" },
+function DashboardMatches() {
+  const matches = [
+    {
+      matchId: 1,
+      date: "2024-01-15",
+      location: "Stadium A",
+      team1: "Falcon Warriors",
+      team2: "Ocean Explorers",
+      time: "15:00",
+      champion: "Falcon Warriors",
+    },
+    {
+      matchId: 2,
+      date: "2024-01-20",
+      location: "Stadium B",
+      team1: "Mountain Climbers",
+      team2: "Desert Rangers",
+      time: "18:00",
+      champion: "Mountain Climbers",
+    },
+    {
+      matchId: 3,
+      date: "2024-02-05",
+      location: "Stadium C",
+      team1: "Sky Flyers",
+      team2: "Tech Titans",
+      time: "20:00",
+      champion: "Sky Flyers",
+    },
+    {
+      matchId: 4,
+      date: "2024-02-10",
+      location: "Stadium D",
+      team1: "River Riders",
+      team2: "Forest Rangers",
+      time: "17:00",
+      champion: "River Riders",
+    },
+    {
+      matchId: 5,
+      date: "2024-02-15",
+      location: "Stadium E",
+      team1: "Polar Explorers",
+      team2: "Sunset Surfers",
+      time: "19:00",
+      champion: "Sunset Surfers",
+    },
   ];
 
   const [searchSelect, setSearchSelect] = useState("id");
-  const [addTeam, setAddTeam] = useState(false);
+  const [addMatch, setAddMatch] = useState(false);
 
   const HeaderRowObject = [
-    { header: "Team Id", key: "teamId", width: 10 },
-    { header: "Team Name", key: "teamName", width: 20 },
-    { header: "Team Type", key: "teamType", width: 15 },
+    { header: "Match Id", key: "matchId", width: 10 },
+    { header: "Date", key: "date", width: 15 },
+    { header: "Location", key: "location", width: 20 },
+    { header: "Team 1", key: "team1", width: 20 },
+    { header: "Team 2", key: "team2", width: 20 },
+    { header: "Time", key: "time", width: 10 },
+    { header: "Champion", key: "champion", width: 20 },
   ];
 
   function SelectOnChange(event) {
@@ -58,7 +97,7 @@ function DashboardTeams() {
 
   return (
     <div className="dashboard-teams-wrapper">
-      <h2>Teams</h2>
+      <h2>Matches</h2>
       <div className="dashboard-teams-header">
         <div className="search-div">
           <input
@@ -66,8 +105,10 @@ function DashboardTeams() {
             placeholder={
               searchSelect === "id"
                 ? "Search by id"
-                : searchSelect === "name"
-                ? "Search by name"
+                : searchSelect === "team1"
+                ? "Search by team 1"
+                : searchSelect === "team2"
+                ? "Search by team 2"
                 : "Search"
             }
             className="dashboard-teams-search-bar"
@@ -82,22 +123,23 @@ function DashboardTeams() {
             }}
           >
             <option value="id">Id</option>
-            <option value="name">Name</option>
-            <option value="teamType">Type</option>
+            <option value="team1">Team 1</option>
+            <option value="team2">Team 2</option>
+            <option value="date">Date</option>
           </select>
         </div>
         <div className="dashboard-teams-controls">
           <button
             className="dashboard-teams-add-btn"
             onClick={() => {
-              setAddTeam(true);
+              setAddMatch(true);
             }}
           >
-            Add Team
+            Add Match
           </button>
           <ExportExcelSheet
-            FileName="Teams"
-            RowsObject={teams}
+            FileName="Matches"
+            RowsObject={matches}
             HeaderRowObject={HeaderRowObject}
           />
         </div>
@@ -106,45 +148,59 @@ function DashboardTeams() {
         <table className="dashboard-teams-table">
           <thead>
             <tr>
-              <th>Team Id</th>
-              <th>Team Name</th>
-              <th>Team Type</th>
+              <th>Match Id</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Team 1</th>
+              <th>Team 2</th>
+              <th>Time</th>
+              <th>Champion</th>
             </tr>
           </thead>
           <tbody>
-            {teams.map((team) => (
-              <tr key={team.teamId}>
+            {matches.map((match) => (
+              <tr key={match.matchId}>
                 <td
                   className={
                     searchSelect === "id" ? "dashboard-search-element" : null
                   }
                 >
-                  {team.teamId}
+                  {match.matchId}
                 </td>
                 <td
                   className={
-                    searchSelect === "name" ? "dashboard-search-element" : null
+                    searchSelect === "date" ? "dashboard-search-element" : null
                   }
                 >
-                  {team.teamName}
+                  {match.date}
+                </td>
+                <td>{match.location}</td>
+                <td
+                  className={
+                    searchSelect === "team1" ? "dashboard-search-element" : null
+                  }
+                >
+                  {match.team1}
                 </td>
                 <td
                   className={
-                    searchSelect === "teamType" ? "dashboard-search-element" : null
+                    searchSelect === "team2" ? "dashboard-search-element" : null
                   }
                 >
-                  {team.teamType}
+                  {match.team2}
                 </td>
+                <td>{match.time}</td>
+                <td>{match.champion}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {addTeam === true ? (
-        <DynamicForm setStatus={setAddTeam} api="" formType="addTeam" />
+      {addMatch === true ? (
+        <DynamicForm setStatus={setAddMatch} api="" formType="addMatch" />
       ) : null}
     </div>
   );
 }
 
-export default DashboardTeams;
+export default DashboardMatches;

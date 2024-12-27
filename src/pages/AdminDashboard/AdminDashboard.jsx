@@ -6,6 +6,7 @@ import DashboardTeams from "./DashboardTeams";
 import DashboardOverview from "./DashboardOverview";
 import DashboardSubscription from "./DashboardSubscription";
 import DashboardMembers from "./DashboardMembers";
+import DashboardMatches from "./DashboardMatches";
 import "./admin-dashboard.css";
 import Profile from "./Profile";
 import DashboardPlayers from "./Players";
@@ -27,11 +28,15 @@ function AdminDashboard() {
           ) : Location.pathname === "/admin-dashboard/subscriptions" ? (
             <DashboardSubscription />
           ) : Location.pathname === "/admin-dashboard/players" ? (
-            <DashboardPlayers memberView={false}/>
+            <DashboardPlayers memberView={false} />
           ) : Location.pathname === "/admin-dashboard/members" ? (
-            <DashboardMembers memberView={false}/>
+            <DashboardMembers memberView={false} />
           ) : Location.pathname === "/admin-dashboard/profile" ? (
             <Profile />
+          ) : Location.pathname === "/admin-dashboard/teams" ? (
+            <DashboardTeams />
+          ) : Location.pathname === "/admin-dashboard/matches" ? (
+            <DashboardMatches />
           ) : null}
         </div>
       </div>

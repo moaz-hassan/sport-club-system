@@ -79,7 +79,7 @@ function DashboardAside({ asideShow, setAsideShow }) {
         >
           <Link to="/admin-dashboard/subscriptions">Subscriptions</Link>
         </li>
-        {/* <li
+        <li
           style={
             location.pathname === "/admin-dashboard/teams"
               ? { backgroundColor: "#4CAF50" }
@@ -87,7 +87,16 @@ function DashboardAside({ asideShow, setAsideShow }) {
           }
         >
           <Link to="/admin-dashboard/teams">Teams</Link>
-        </li> */}
+        </li>
+        <li
+          style={
+            location.pathname === "/admin-dashboard/matches"
+              ? { backgroundColor: "#4CAF50" }
+              : null
+          }
+        >
+          <Link to="/admin-dashboard/matches">Matches</Link>
+        </li>
       </ul>
     </aside>
   );

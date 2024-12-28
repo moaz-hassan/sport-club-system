@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import ApiReq from "../../hooks/apiReq";
+import store from "../../components/store";
 
 function SignUp() {
   const [userName, setUserName] = useState("");
@@ -18,6 +21,34 @@ function SignUp() {
   useEffect(() => {
     setPlan("free");
   }, []);
+
+  function signUpRequest() {
+    console.log(store.getState());
+    if(store.getState().resObj.status === "Success") {
+      ApiReq("api/signup", "POST", {
+        userName: userName,
+        password: password,
+        number: number,
+        birthDate: birthDate,
+        email: email,
+      });
+    }
+  }
+  const handleRequestCode = async () => {
+    try {
+      await ApiReq("api/request-otp", "POST", { email: email });
+    } catch (error) {
+      console.error("Error occurred while requesting OTP:", error);
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    try {
+      await ApiReq("api/verify-otp", "POST", { email: email, otpCode: otpCode});
+    } catch (error) {
+      console.error("Error occurred while requesting OTP:", error);
+    }
+  };
 
   const handleChange =
     (setter, validationFn = null) =>
@@ -105,7 +136,10 @@ function SignUp() {
             <label htmlFor={id}>{label}</label>
           </div>
         ))}
-        <div className="input-container" style={{display:"flex",gap:"10px"}}>
+        <div
+          className="input-container"
+          style={{ display: "flex", gap: "10px" }}
+        >
           <input
             type="number"
             id="otp-code"
@@ -115,7 +149,24 @@ function SignUp() {
             placeholder=" "
           />
           <label htmlFor="otp-code">Code</label>
-          <button type="button" className="otp-btn">Get Code</button>
+          <button
+            onClick={() => {
+              handleRequestCode();
+            }}
+            type="button"
+            className="otp-btn"
+          >
+            Get Code
+          </button>
+          <button
+            onClick={() => {
+              handleVerifyCode();
+            }}
+            type="button"
+            className="otp-btn"
+          >
+            Verify Code
+          </button>
         </div>
 
         <div className="input-container">
@@ -154,7 +205,16 @@ function SignUp() {
         </div>
 
         <div>
-          <input type="submit" value="Sign Up" disabled={!!errorMessage} />
+          <button
+            onClick={() => {
+              signUpRequest();
+            }}
+            type="button"
+            value="Sign Up"
+            disabled={!!errorMessage}
+          >
+            Sign up
+          </button>
         </div>
         <div>
           <Link to="/Login">Already have an account? Login</Link>

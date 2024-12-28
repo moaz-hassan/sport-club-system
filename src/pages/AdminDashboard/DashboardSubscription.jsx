@@ -1,33 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./admin-dashboard.css";
 import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
+import ApiReq from "../../hooks/apiReq";
 
 function DashboardMembers() {
-  const members = [
-    {
-      id: 1,
-      name: "Ahmed Ali",
-      email: "ahmed.ali@example.com",
-      phoneNumber: "123-456-7890",
-      subscriptionStatus: "active",
-      role: "member",
-      status: "not blocked",
-    },
-    {
-      id: 2,
-      name: "Mohammed Yasin",
-      email: "mohammed.yasin@example.com",
-      phoneNumber: "234-567-8901",
-      subscriptionStatus: "inactive",
-      role: "coach",
-      status: "blocked",
-    },
-    // Add similar entries for other members
-  ];
-
+  const [plans, setPlans] = useState([]);
   const [searchSelect, setSearchSelect] = useState("id");
   const [addMember, setAddMember] = useState(false);
+
+  useEffect(() => {
+    ApiReq("api/get_subscription_plane", "GET", setPlans);
+  }, []);
 
   const HeaderRowObject = [
     { header: "Member Id", key: "id", width: 10 },
@@ -55,13 +39,9 @@ function DashboardMembers() {
     const SearchElements = document.querySelectorAll(
       ".dashboard-members-table tbody tr .dashboard-search-element"
     );
-    const searchValue = searchInput.value;
+    const searchValue = searchInput.value.toLowerCase();
     for (let i = 0; i < SearchElements.length; i++) {
-      if (
-        SearchElements[i].textContent
-          .toLowerCase()
-          .includes(searchValue.toLowerCase())
-      ) {
+      if (SearchElements[i].textContent.toLowerCase().includes(searchValue)) {
         SearchElements[i].parentElement.style.display = "table-row";
       } else {
         SearchElements[i].parentElement.style.display = "none";
@@ -69,9 +49,14 @@ function DashboardMembers() {
     }
   }
 
-  // const handleMenuAction = (memberId, action) => {
-  //   console.log(`Action: ${action} for Member ID: ${memberId}`);
-  // };
+  const handleDelete = (planId) => {
+    ApiReq(`api/delete_subscription_plan/${planId}`, "DELETE", () => {
+      setPlans((prevPlans) => ({
+        ...prevPlans,
+        data: prevPlans.data.filter((plan) => plan.Subscription_ID !== planId),
+      }));
+    });
+  };
 
   return (
     <div className="dashboard-members-wrapper">
@@ -82,16 +67,9 @@ function DashboardMembers() {
             type="search"
             placeholder={searchSelect === "id" ? "Search by id" : "Search"}
             className="dashboard-members-search-bar"
-            onChange={(event) => {
-              SearchFunc(event);
-            }}
+            onChange={SearchFunc}
           />
-          <select
-            id="search-select"
-            onChange={(event) => {
-              SelectOnChange(event);
-            }}
-          >
+          <select id="search-select" onChange={SelectOnChange}>
             <option value="id">Id</option>
             <option value="name">Name</option>
           </select>
@@ -99,15 +77,13 @@ function DashboardMembers() {
         <div className="dashboard-members-controls">
           <button
             className="dashboard-members-add-btn"
-            onClick={() => {
-              setAddMember(true);
-            }}
+            onClick={() => setAddMember(true)}
           >
             Add Plan
           </button>
           <ExportExcelSheet
-            FileName="Members"
-            RowsObject={members}
+            FileName="Plans"
+            RowsObject={plans}
             HeaderRowObject={HeaderRowObject}
           />
         </div>
@@ -118,48 +94,42 @@ function DashboardMembers() {
             <tr>
               <th>Plan Id</th>
               <th>Plan Name</th>
+              <th>Plan Type</th>
               <th>Price / month</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {members.map((member) => (
-              <tr key={member.id}>
+            {plans.data?.map((plan) => (
+              <tr key={plan.Subscription_ID}>
                 <td
                   className={
                     searchSelect === "id" ? "dashboard-search-element" : null
                   }
                 >
-                  {member.id}
+                  {plan.Subscription_ID}
                 </td>
                 <td
                   className={
                     searchSelect === "name" ? "dashboard-search-element" : null
                   }
                 >
-                  {member.name}
+                  {plan.Subscription_Name}
                 </td>
-                <td
-                  className={
-                    searchSelect === "status"
-                      ? "dashboard-search-element"
-                      : null
-                  }
-                >
-                  100$
-                </td>
-                <td>
-                  <button style={{margin:"0 5px"}}>Edit</button>
-                  <button>Delete</button>
-                </td>
+                <td>{plan.Subscription_Plan_type}</td>
+                <td>{plan.Subscription_Amount}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {addMember === true ? (
-        <DynamicForm setStatus={setAddMember} api="" formType="addSubscriptionPlan" />
-      ) : null}
+
+      {addMember && (
+        <DynamicForm
+          setStatus={setAddMember}
+          api="api/add_subscription_plan"
+          formType="addSubscriptionPlan"
+        />
+      )}
     </div>
   );
 }

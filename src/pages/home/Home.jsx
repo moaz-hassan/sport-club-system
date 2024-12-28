@@ -9,19 +9,37 @@ import FAQ from "./FAQ";
 import "./home.css";
 import News from "../../components/News";
 import MatchesComponent from "../../components/MatchesComponent";
+import {
+  getDecryptedId,
+  storeUserDataInCookies,
+} from "../../utils/storageUtils";
+import axios from "axios";
+import { useState } from "react";
 // import { useState } from "react";
 
 function HomePage() {
-  // const [hideFlow,setHideFlow] = useState(false);
-  // ApiReq("https://fakestoreapi.com/products", "GET").then((apiData) => {
-  //   console.log(apiData);
-  // });
-  // if (hideFlow) {
-  //   document.querySelector("#root").style.overflow = "hidden";
-  // }
+  const [render, setRender] = useState(false);
+  function getUserInfo() {
+    // console.log(Number(getDecryptedId()));
+    axios({
+      method: "POST",
+      url: `https://elkhazzansc.pythonanywhere.com/api/Get_UserData`,
+      data: { id: Number(getDecryptedId()) },
+    })
+      .then((response) => {
+        storeUserDataInCookies(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error.response?.data || error.message);
+      });
+  }
+  if (getDecryptedId()) {
+    getUserInfo();
+  }
+
   return (
     <>
-      <Navbar />
+      <Navbar render={render} setRender={setRender}/>
       <div className="home-container">
         {" "}
         {/* setBodyFlow={setHideFlow} */}

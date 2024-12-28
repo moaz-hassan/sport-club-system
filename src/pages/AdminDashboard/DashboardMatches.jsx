@@ -1,56 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./admin-dashboard.css";
 import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
+import ApiReq from "../../hooks/apiReq";
 
 function DashboardMatches() {
-  const matches = [
-    {
-      matchId: 1,
-      date: "2024-01-15",
-      location: "Stadium A",
-      team1: "Falcon Warriors",
-      team2: "Ocean Explorers",
-      time: "15:00",
-      champion: "Falcon Warriors",
-    },
-    {
-      matchId: 2,
-      date: "2024-01-20",
-      location: "Stadium B",
-      team1: "Mountain Climbers",
-      team2: "Desert Rangers",
-      time: "18:00",
-      champion: "Mountain Climbers",
-    },
-    {
-      matchId: 3,
-      date: "2024-02-05",
-      location: "Stadium C",
-      team1: "Sky Flyers",
-      team2: "Tech Titans",
-      time: "20:00",
-      champion: "Sky Flyers",
-    },
-    {
-      matchId: 4,
-      date: "2024-02-10",
-      location: "Stadium D",
-      team1: "River Riders",
-      team2: "Forest Rangers",
-      time: "17:00",
-      champion: "River Riders",
-    },
-    {
-      matchId: 5,
-      date: "2024-02-15",
-      location: "Stadium E",
-      team1: "Polar Explorers",
-      team2: "Sunset Surfers",
-      time: "19:00",
-      champion: "Sunset Surfers",
-    },
-  ];
+  const [matches, setMatches] = useState({});
+
+  useEffect(() => {
+    ApiReq("api/Get_matchs", "GET", setMatches);
+  }, []);
 
   const [searchSelect, setSearchSelect] = useState("id");
   const [addMatch, setAddMatch] = useState(false);
@@ -158,46 +117,46 @@ function DashboardMatches() {
             </tr>
           </thead>
           <tbody>
-            {matches.map((match) => (
-              <tr key={match.matchId}>
+            {matches?.data?.map((match) => (
+              <tr key={match.Match_ID}>
                 <td
                   className={
                     searchSelect === "id" ? "dashboard-search-element" : null
                   }
                 >
-                  {match.matchId}
+                  {match.Match_ID}
                 </td>
                 <td
                   className={
                     searchSelect === "date" ? "dashboard-search-element" : null
                   }
                 >
-                  {match.date}
+                  {match.Match_Date}
                 </td>
-                <td>{match.location}</td>
+                <td>{match.Match_stadium}</td>
                 <td
                   className={
                     searchSelect === "team1" ? "dashboard-search-element" : null
                   }
                 >
-                  {match.team1}
+                  {match.Match_FTeam}
                 </td>
                 <td
                   className={
                     searchSelect === "team2" ? "dashboard-search-element" : null
                   }
                 >
-                  {match.team2}
+                  {match.Match_STeam}
                 </td>
-                <td>{match.time}</td>
-                <td>{match.champion}</td>
+                <td>{new Date(match?.Match_start_time * 1000)?.toLocaleString()}</td>
+                <td>{match.Match_champion}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       {addMatch === true ? (
-        <DynamicForm setStatus={setAddMatch} api="" formType="addMatch" />
+        <DynamicForm setStatus={setAddMatch} endPoint={"api/add_match"} formType="addMatch" />
       ) : null}
     </div>
   );

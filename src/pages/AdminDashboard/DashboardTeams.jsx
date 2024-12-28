@@ -1,22 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./admin-dashboard.css";
 import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
+import ApiReq from "../../hooks/apiReq";
 
 function DashboardTeams() {
-  const teams = [
-    { teamId: 1, teamName: "Falcon Warriors", teamType: "A" },
-    { teamId: 2, teamName: "Ocean Explorers", teamType: "B" },
-    { teamId: 3, teamName: "Mountain Climbers", teamType: "C" },
-    { teamId: 4, teamName: "Desert Rangers", teamType: "A" },
-    { teamId: 5, teamName: "Sky Flyers", teamType: "B" },
-    { teamId: 6, teamName: "Tech Titans", teamType: "C" },
-    { teamId: 7, teamName: "River Riders", teamType: "A" },
-    { teamId: 8, teamName: "Forest Rangers", teamType: "B" },
-    { teamId: 9, teamName: "Polar Explorers", teamType: "C" },
-    { teamId: 10, teamName: "Sunset Surfers", teamType: "A" },
-  ];
-
+  const [teams, setTeams] = useState({});
   const [searchSelect, setSearchSelect] = useState("id");
   const [addTeam, setAddTeam] = useState(false);
 
@@ -26,6 +15,13 @@ function DashboardTeams() {
     { header: "Team Type", key: "teamType", width: 15 },
   ];
 
+  // Fetch teams on component mount
+  useEffect(() => {
+    ApiReq("api/Get_teams", "GET", setTeams);
+  }, []);
+
+
+  // Handle search select dropdown changes
   function SelectOnChange(event) {
     document.querySelector(".dashboard-teams-search-bar").value = "";
     const SearchElements = document.querySelectorAll(
@@ -37,18 +33,15 @@ function DashboardTeams() {
     setSearchSelect(event.target.value);
   }
 
+  // Search functionality
   function SearchFunc(event) {
     const searchInput = event.target;
     const SearchElements = document.querySelectorAll(
       ".dashboard-teams-table tbody tr .dashboard-search-element"
     );
-    const searchValue = searchInput.value;
+    const searchValue = searchInput.value.toLowerCase();
     for (let i = 0; i < SearchElements.length; i++) {
-      if (
-        SearchElements[i].textContent
-          .toLowerCase()
-          .includes(searchValue.toLowerCase())
-      ) {
+      if (SearchElements[i].textContent.toLowerCase().includes(searchValue)) {
         SearchElements[i].parentElement.style.display = "table-row";
       } else {
         SearchElements[i].parentElement.style.display = "none";
@@ -71,16 +64,9 @@ function DashboardTeams() {
                 : "Search"
             }
             className="dashboard-teams-search-bar"
-            onChange={(event) => {
-              SearchFunc(event);
-            }}
+            onChange={SearchFunc}
           />
-          <select
-            id="search-select"
-            onChange={(event) => {
-              SelectOnChange(event);
-            }}
-          >
+          <select id="search-select" onChange={SelectOnChange}>
             <option value="id">Id</option>
             <option value="name">Name</option>
             <option value="teamType">Type</option>
@@ -89,15 +75,13 @@ function DashboardTeams() {
         <div className="dashboard-teams-controls">
           <button
             className="dashboard-teams-add-btn"
-            onClick={() => {
-              setAddTeam(true);
-            }}
+            onClick={() => setAddTeam(true)}
           >
             Add Team
           </button>
           <ExportExcelSheet
             FileName="Teams"
-            RowsObject={teams}
+            RowsObject={teams.data}
             HeaderRowObject={HeaderRowObject}
           />
         </div>
@@ -112,37 +96,45 @@ function DashboardTeams() {
             </tr>
           </thead>
           <tbody>
-            {teams.map((team) => (
-              <tr key={team.teamId}>
-                <td
-                  className={
-                    searchSelect === "id" ? "dashboard-search-element" : null
-                  }
-                >
-                  {team.teamId}
-                </td>
-                <td
-                  className={
-                    searchSelect === "name" ? "dashboard-search-element" : null
-                  }
-                >
-                  {team.teamName}
-                </td>
-                <td
-                  className={
-                    searchSelect === "teamType" ? "dashboard-search-element" : null
-                  }
-                >
-                  {team.teamType}
-                </td>
+            {teams.data?.length > 0 ? (
+              teams.data.map((team) => (
+                <tr key={team.Team_ID}>
+                  <td
+                    className={
+                      searchSelect === "id" ? "dashboard-search-element" : null
+                    }
+                  >
+                    {team.Team_ID}
+                  </td>
+                  <td
+                    className={
+                      searchSelect === "name" ? "dashboard-search-element" : null
+                    }
+                  >
+                    {team.Team_Name}
+                  </td>
+                  <td
+                    className={
+                      searchSelect === "teamType"
+                        ? "dashboard-search-element"
+                        : null
+                    }
+                  >
+                    {team.Team_Type}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="3">No teams available</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
-      {addTeam === true ? (
-        <DynamicForm setStatus={setAddTeam} api="" formType="addTeam" />
-      ) : null}
+      {addTeam && (
+        <DynamicForm setStatus={setAddTeam} api="api/Add_team" formType="addTeam" />
+      )}
     </div>
   );
 }

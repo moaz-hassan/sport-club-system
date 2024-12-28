@@ -12,37 +12,52 @@ import Shop from "./pages/shop/Shop";
 import ProductDetailsPage from "./pages/productDetails/ProductDetails";
 import CheckoutPage from "./pages/Checkout-page/CheckoutPage";
 import MatchDetails from "./pages/match-details/MatchDetails";
-
+import { getUserDataFromCookies } from "./utils/storageUtils";
 
 function App() {
+  const isAdmin = getUserDataFromCookies()?.Member_Role === "admin";
+  const isLogin = getUserDataFromCookies()?.Member_Role === "Member" || "admin";
+
+  const adminRoutes = [
+    "/admin-dashboard/overview",
+    "/admin-dashboard/teams",
+    "/admin-dashboard/matches",
+    "/admin-dashboard/members",
+    "/admin-dashboard/players",
+    "/admin-dashboard/subscriptions",
+    "/admin-dashboard/events",
+  ];
+
   return (
     <BrowserRouter
       future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
     >
       <Routes>
+        {/* General Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/match-details/:matchId" element={<MatchDetails />} />
-        <Route path="/admin-dashboard/overview" element={<AdminDashboard />} />
-        <Route path="/admin-dashboard/teams" element={<AdminDashboard />} />
-        <Route path="/admin-dashboard/matches" element={<AdminDashboard />} />
-        <Route path="/admin-dashboard/members" element={<AdminDashboard />} />
-        <Route path="/admin-dashboard/players" element={<AdminDashboard />} />
-        <Route
-          path="/admin-dashboard/subscriptions"
-          element={<AdminDashboard />}
-        />
-        <Route path="/admin-dashboard/events" element={<AdminDashboard />} />
-        <Route path="/admin-dashboard/profile" element={<AdminDashboard />} />
         <Route path="/plans" element={<Plans />} />
         <Route path="/shop" element={<Shop />} />
-        <Route path="/shop/:productId" element={<ProductDetailsPage/>} />
+        <Route path="/shop/:productId" element={<ProductDetailsPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        {/* Not Found Page (Erorr 404) */}
+
+        {/* Admin Routes */}
+        {isAdmin &&
+          adminRoutes.map((path) => (
+            <Route key={path} path={path} element={<AdminDashboard />} />
+          ))}
+
+        {/* Admin Profile Route */}
+        {isLogin && (
+          <Route path="/admin-dashboard/profile" element={<AdminDashboard />} />
+        )}
+
+        {/* Fallback Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

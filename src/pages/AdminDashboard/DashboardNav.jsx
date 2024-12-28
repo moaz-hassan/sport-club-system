@@ -3,9 +3,15 @@ import { useState } from "react";
 import { FiMenu, FiUser, FiLogOut } from "react-icons/fi";
 import logo from "../../assets/4843042_ball_game_play_sport_tennis_icon.png";
 import "./admin-dashboard.css";
-import { Link } from "react-router-dom";
-
-function DashboardNav({ adminName = "Admin", setAsideShow, asideShow }) {
+import { Link, useNavigate } from "react-router-dom";
+import {
+  clearEncryptedId,
+  clearUserDataFromCookies,
+  getUserDataFromCookies,
+} from "../../utils/storageUtils";
+import store from "../../components/store";
+function DashboardNav({ setAsideShow, asideShow }) {
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -27,6 +33,14 @@ function DashboardNav({ adminName = "Admin", setAsideShow, asideShow }) {
     }
   }
 
+  function LogOut() {
+    clearEncryptedId();
+    clearUserDataFromCookies();
+    alert("Logged out successfully!");
+    navigate("/");
+    store.dispatch({ type: "resObj", payload: {} });
+  }
+
   return (
     <nav className="dashboard-nav">
       <div className="nav-left">
@@ -38,7 +52,9 @@ function DashboardNav({ adminName = "Admin", setAsideShow, asideShow }) {
       <div className="nav-right">
         <div className="profile-section" onClick={toggleDropdown}>
           <span>Hi, </span>
-          <span className="admin-name">{adminName}</span>
+          <span className="admin-name">
+            {getUserDataFromCookies().Member_Name}
+          </span>
         </div>
         <div className="dropdown">
           {isDropdownOpen && (
@@ -46,7 +62,12 @@ function DashboardNav({ adminName = "Admin", setAsideShow, asideShow }) {
               <Link to="/admin-dashboard/profile" className="dropdown-item">
                 <FiUser /> Profile
               </Link>
-              <button className="dropdown-item logout">
+              <button
+                className="dropdown-item logout"
+                onClick={() => {
+                  LogOut();
+                }}
+              >
                 <FiLogOut /> Logout
               </button>
             </div>

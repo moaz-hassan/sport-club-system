@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import axios from "axios";
+import ApiReq from "../hooks/apiReq";
 
-function DynamicForm({ formType, api, setStatus }) {
+function DynamicForm({ formType, endPoint, setStatus }) {
   const [formData, setFormData] = useState({});
   const [isFormValid, setIsFormValid] = useState(false); // State to manage button enabled/disabled
 
@@ -11,21 +11,19 @@ function DynamicForm({ formType, api, setStatus }) {
     { name: "team_type", placeholder: "Team ID", type: "text", required: true },
   ];
   const addMatchFields = [
+    { name: "match_FTeam", placeholder: "Team 1", type: "text", required: true },
+    { name: "match_STeam", placeholder: "Team 2", type: "text", required: true },
     { name: "match_date", placeholder: "Match Date", type: "date", required: true },
-    { name: "match_location", placeholder: "Location", type: "text", required: true },
-    { name: "match_team1", placeholder: "Team 1", type: "text", required: true },
-    { name: "match_team2", placeholder: "Team 2", type: "text", required: true },
-    { name: "match_time", placeholder: "Match Time", type: "time", required: true },
-    { name: "match_champion", placeholder: "Champion", type: "text", required: true },
+    { name: "match_start_time", placeholder: "Match Time", type: "time", required: true },
+    { name: "match_stadium", placeholder: "Location", type: "text", required: true },
+    { name: "match_champoin", placeholder: "Champion", type: "text", required: true },
   ];
-  
-
   const addMemberFields = [
-    { name: "name", placeholder: "Member Name", type: "text", required: true },
-    { name: "role", placeholder: "Role", type: "text", required: true },
+    { name: "userName", placeholder: "Member Name", type: "text", required: true },
+    { name: "Role", placeholder: "Role", type: "text", required: true },
     { name: "email", placeholder: "Email", type: "email", required: true },
-    { name: "phone", placeholder: "Phone", type: "tel", required: true },
-    { name: "birth", placeholder: "Birth date", type: "date", required: true },
+    { name: "number", placeholder: "Phone", type: "tel", required: true },
+    { name: "birthDate", placeholder: "Birth date", type: "date", required: true },
     { name: "password", placeholder: "Password", type: "password", required: true },
   ];
 
@@ -39,17 +37,17 @@ function DynamicForm({ formType, api, setStatus }) {
     { name: "type", placeholder: "Type", type: "text", required: true },
   ];
 
-  // Function to send data to the API
-  function apiReq(api, object) {
-    axios({
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      url: api,
-      data: JSON.stringify(object),
-    }).catch((error) => console.log(error.message));
-  }
+  // // Function to send data to the API
+  // function apiReq(api, object) {
+  //   axios({
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     method: "POST",
+  //     url: api,
+  //     data: JSON.stringify(object),
+  //   }).catch((error) => console.log(error.message));
+  // }
 
   const getFormFields = () => {
     switch (formType) {
@@ -63,6 +61,8 @@ function DynamicForm({ formType, api, setStatus }) {
         return addPlayerFields;
       case "addSubscriptionPlan":
         return addSubscriptionPlanFields;
+        case "editSubscriptionPlan":
+        return editSubscriptionPlan;
       default:
         return [];
     }
@@ -81,11 +81,12 @@ function DynamicForm({ formType, api, setStatus }) {
     });
     setIsFormValid(isValid);
   }, [formData]);
+console.log(formData);
 
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    apiReq(api, formData);
+    ApiReq(endPoint,"POST",formFields);
   };
 
   const formFields = getFormFields();

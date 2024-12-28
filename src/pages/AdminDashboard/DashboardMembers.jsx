@@ -1,32 +1,19 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./admin-dashboard.css";
 import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
 import { Link } from "react-router-dom";
+import ApiReq from "../../hooks/apiReq";
 
 function DashboardMembers({ memberView }) {
-  const members = [
-    {
-      id: 1,
-      name: "Ahmed Ali",
-      email: "ahmed.ali@example.com",
-      phoneNumber: "123-456-7890",
-      subscriptionStatus: "active",
-      role: "member",
-      status: "not blocked",
-    },
-    {
-      id: 2,
-      name: "Mohammed Yasin",
-      email: "mohammed.yasin@example.com",
-      phoneNumber: "234-567-8901",
-      subscriptionStatus: "inactive",
-      role: "coach",
-      status: "blocked",
-    },
-    // Add similar entries for other members
-  ];
+  const [members, setMembers] = useState({});
+
+  useEffect(() => {
+    ApiReq("api/Get_users", "GET", setMembers);
+  }, []);
+
+  console.log(members);
 
   const [searchSelect, setSearchSelect] = useState("id");
   const [addMember, setAddMember] = useState(false);
@@ -143,28 +130,28 @@ function DashboardMembers({ memberView }) {
             </tr>
           </thead>
           <tbody>
-            {members.map((member) => (
-              <tr key={member.id}>
+            {members?.data?.map((member) => (
+              <tr key={member.Member_ID}>
                 <td
                   className={
                     searchSelect === "id" ? "dashboard-search-element" : null
                   }
                 >
-                  {member.id}
+                  {member.Member_ID}
                 </td>
                 <td
                   className={
                     searchSelect === "name" ? "dashboard-search-element" : null
                   }
                 >
-                  {member.name}
+                  {member.Member_Name}
                 </td>
                 <td
                   className={
                     searchSelect === "email" ? "dashboard-search-element" : null
                   }
                 >
-                  {member.email}
+                  {member.Member_Email}
                 </td>
                 <td
                   className={
@@ -173,7 +160,7 @@ function DashboardMembers({ memberView }) {
                       : null
                   }
                 >
-                  {member.phoneNumber}
+                  {member.Member_phone}
                 </td>
                 <td
                   className={
@@ -182,14 +169,14 @@ function DashboardMembers({ memberView }) {
                       : null
                   }
                 >
-                  {member.subscriptionStatus}
+                  {member.Member_Subscription_state === null && "Free"}
                 </td>
                 <td
                   className={
                     searchSelect === "role" ? "dashboard-search-element" : null
                   }
                 >
-                  {member.role}
+                  {member.Member_Role}
                 </td>
                 <td
                   className={
@@ -198,15 +185,31 @@ function DashboardMembers({ memberView }) {
                       : null
                   }
                 >
-                  <select
-                    className="actions-select"
-                    onChange={(e) =>
-                      handleMenuAction(member.id, e.target.value)
-                    }
-                  >
-                    <option value="user-active">Active</option>
-                    <option value="block">Block</option>
-                  </select>
+                  {member.Member_status === "Active" ? (
+                    <>
+                      {" "}
+                      <button
+                        onClick={() => {
+                          ApiReq("api/edit_person_data", "POST", {
+                            member_id: member.Member_ID,
+                            user_name: member.Member_Name,
+                            number: member.Member_phone,
+                            birth_date: member.Member_BirthDate,
+                            email: member.Member_Email,
+                            member_role: member.Member_Role,
+                            member_status: "inactive",
+                          });
+                        }}
+                      >
+                        Block
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <button>Active</button>
+                    </>
+                  )}
                 </td>
                 <td>
                   <select
@@ -215,9 +218,9 @@ function DashboardMembers({ memberView }) {
                       handleMenuAction(member.id, e.target.value)
                     }
                   >
-                    <option value="">Select Action</option>
+                    {/* <option value="">Select Action</option> */}
                     <option value="makeAdmin">Make Admin</option>
-                    <option value="block">Block</option>
+                    {/* <option value="block">Block</option> */}
                     <option value="makeCoach">Make Coach</option>
                   </select>
                 </td>
@@ -227,7 +230,11 @@ function DashboardMembers({ memberView }) {
         </table>
       </div>
       {addMember === true ? (
-        <DynamicForm setStatus={setAddMember} api="" formType="addMember" />
+        <DynamicForm
+          setStatus={setAddMember}
+          endPoint={"api/add_person"}
+          formType="addMember"
+        />
       ) : null}
     </div>
   );

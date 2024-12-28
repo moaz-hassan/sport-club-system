@@ -1,50 +1,82 @@
 /* eslint-disable react/prop-types */
+import {
+  clearEncryptedId,
+  clearUserDataFromCookies,
+  getDecryptedId,
+  getUserDataFromCookies,
+} from "../../utils/storageUtils";
 import "./profile.css";
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import apiReq from "../../hooks/apiReq";
+import store from "../../components/store";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false); // State to manage edit mode
-  const [name, setName] = useState('John Doe'); // Example name state
-  const [email, setEmail] = useState('john.doe@example.com'); // Example email state
-  const [phone, setPhone] = useState('123-456-7890'); // Example phone state
-  const [birth, setBirth] = useState('1990-01-01'); // Example birthdate state
-  const [country, setCountry] = useState('USA'); // Example country state
-  const [plan, setPlan] = useState('Premium Plan'); // Example plan state
-  const [gender, setGender] = useState('Male'); // Example gender state
-  const [password, setPassword] = useState(''); // Password state
-
+  const [name, setName] = useState("John Doe"); // Example name state
+  const [email, setEmail] = useState("john.doe@example.com"); // Example email state
+  const [phone, setPhone] = useState("123-456-7890"); // Example phone state
+  const [birth, setBirth] = useState("1990-01-01"); // Example birthdate state
+  const [plan, setPlan] = useState("Premium Plan"); // Example plan state
+  const [password, setPassword] = useState(""); // Password state
   const payments = [
     {
-      id: 'P001',
-      date: '2024-12-01',
-      amount: '$100',
-      status: 'Paid',
-      itemBought: 'Annual Subscription',
+      id: "P001",
+      date: "2024-12-01",
+      amount: "$100",
+      status: "Paid",
+      itemBought: "Annual Subscription",
     },
     {
-      id: 'P002',
-      date: '2024-11-15',
-      amount: '$150',
-      status: 'Pending',
-      itemBought: 'Premium Plan',
+      id: "P002",
+      date: "2024-11-15",
+      amount: "$150",
+      status: "Pending",
+      itemBought: "Premium Plan",
     },
     {
-      id: 'P003',
-      date: '2024-10-20',
-      amount: '$200',
-      status: 'Paid',
-      itemBought: 'One-time Event Ticket',
+      id: "P003",
+      date: "2024-10-20",
+      amount: "$200",
+      status: "Paid",
+      itemBought: "One-time Event Ticket",
     },
   ];
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log(getUserDataFromCookies());
+    setName(getUserDataFromCookies().Member_Name);
+    setEmail(getUserDataFromCookies().Member_Email);
+    setPhone(getUserDataFromCookies().Member_phoneNumber);
+    setBirth(getUserDataFromCookies().Member_BirthDate || "2000-01-01");
+    setPlan(getUserDataFromCookies().Member_subscription_status || "Free");
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
+  function LogOut() {
+    clearEncryptedId();
+    clearUserDataFromCookies();
+    alert("Logged out successfully!");
+    navigate("/");
+    store.dispatch({ type: "resObj", payload: {} });
+  }
   const handleUpdateClick = () => {
-    // Handle the update logic here (e.g., save to database or backend)
+    apiReq("api/EditUserData", "POST", {
+      id: getDecryptedId(),
+      userName: name,
+      number: phone,
+      address: "",
+      password: password,
+    });
     setIsEditing(false);
+
+    navigate("/login");
   };
+
+  // apiReq("api/Get_payment_by_id", "POST", { member_id: 2});
 
   return (
     <div className="profile">
@@ -90,16 +122,6 @@ const Profile = () => {
           onChange={(e) => setBirth(e.target.value)}
         />
 
-        <label htmlFor="country">Country</label>
-        <input
-          id="country"
-          type="text"
-          placeholder="Country"
-          value={country}
-          disabled
-          onChange={(e) => setCountry(e.target.value)}
-        />
-
         <label htmlFor="plan">Plan</label>
         <input
           id="plan"
@@ -108,16 +130,6 @@ const Profile = () => {
           value={plan}
           disabled
           onChange={(e) => setPlan(e.target.value)}
-        />
-
-        <label htmlFor="gender">Gender</label>
-        <input
-          id="gender"
-          type="text"
-          placeholder="Gender"
-          value={gender}
-          disabled
-          onChange={(e) => setGender(e.target.value)}
         />
 
         <label htmlFor="password">Password</label>

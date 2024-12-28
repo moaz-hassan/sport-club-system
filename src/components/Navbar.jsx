@@ -3,8 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/4843042_ball_game_play_sport_tennis_icon.png";
 import { useState } from "react";
 import FlowDiv from "./FlowDiv";
+import UserMegaMenu from "./UserMegaMenu";
+import { getUserDataFromCookies } from "../utils/storageUtils";
+import store from "./store";
 
-function Navbar() {
+function Navbar({ render, setRender }) {
   // {setBodyFlow}
   const [showAside, setShowAside] = useState(false);
   const currentRoute = useLocation();
@@ -145,7 +148,7 @@ function Navbar() {
                     }
                   : null
               }
-            > 
+            >
               Shop
             </Link>
           </li>
@@ -204,15 +207,19 @@ function Navbar() {
             </Link>
           </li>
         </ul>
-        <div className="auth-btns">
-          <Link to="/login">Login</Link>
-          <Link
-            to="/sign-up"
-            style={{ color: "white", backgroundColor: "green" }}
-          >
-            Sign up
-          </Link>
-        </div>
+        {store.getState().resObj.data || getUserDataFromCookies()? (
+          <UserMegaMenu render={render} setRender={setRender} />
+        ) : (
+          <div className="auth-btns">
+            <Link to="/login">Login</Link>
+            <Link
+              to="/sign-up"
+              style={{ color: "white", backgroundColor: "green" }}
+            >
+              Sign up
+            </Link>
+          </div>
+        )}
       </nav>
     </>
   );

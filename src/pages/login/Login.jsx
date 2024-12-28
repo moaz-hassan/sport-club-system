@@ -1,13 +1,23 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import store from "../../components/store";
+import ApiReq from "../../hooks/apiReq";
+import { getDecryptedId } from "../../utils/storageUtils";
 
 function Login() {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  
+  // useEffect(() => {
+  //   if(getDecryptedId()){
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,17 +26,23 @@ function Login() {
       setErrorMessage("Both fields are required.");
       return;
     }
-    // setErrorMessage("");
-    // console.log("Logged In:", { userName, password });
   };
 
+  function logInRequest() {
+    ApiReq("api/login", "POST", {
+      username: userName,
+      Password: password,
+    },navigate);
+  }
   return (
     <>
       <Navbar />
       <form onSubmit={handleSubmit} className="login-form">
         <h2>Login</h2>
 
-        {errorMessage && <div className="login-error-message">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="login-error-message">{errorMessage}</div>
+        )}
 
         <div className="login-input-container">
           <input
@@ -67,7 +83,14 @@ function Login() {
         </div>
 
         <div>
-          <input type="submit" value="Login" className="login-submit" />
+          <button
+            type="button"
+            onClick={() => {
+              logInRequest();
+            }}
+          >
+            Login
+          </button>
         </div>
 
         <div className="login-links">

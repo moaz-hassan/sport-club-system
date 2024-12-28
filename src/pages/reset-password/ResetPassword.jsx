@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+// import axios from "axios";
+import ApiReq from "../../hooks/apiReq";
+import store from "../../components/store";
 
 function ResetPassword() {
   const [email, setEmail] = useState();
@@ -22,6 +25,24 @@ function ResetPassword() {
     }
   };
 
+  const handleRequestCode = async () => {
+    try {
+      await ApiReq("api/request-otp", "POST", { email: email });
+      console.log(store.getState());
+      
+    } catch (error) {
+      console.error("Error occurred while requesting OTP:", error);
+    }
+  };
+
+  // const handleRequestResetPass = () => {
+  //   ApiReq(
+  //     "api/verify-otp",
+  //     "POST",
+  //     { email: email, otpCode: resetCode, password: password }
+  //   );
+
+  // };
   const handleResetCode = (e) => {
     const value = e.target.value;
     setResetCode(value);
@@ -84,6 +105,9 @@ function ResetPassword() {
             type="button"
             className="check-email-btn"
             disabled={errorMessage ? true : false}
+            onClick={() => {
+              handleRequestCode();
+            }}
           >
             Check Email
           </button>
@@ -128,7 +152,13 @@ function ResetPassword() {
             }}
           ></i>
         </div>
-        <button type="submit" disabled={errorMessage ? true : false}>
+        <button
+          onClick={() => {
+            handleRequestResetPass();
+          }}
+          type="button"
+          disabled={errorMessage ? true : false}
+        >
           Reset Password
         </button>
         <Link to="/login">Back to Login</Link>

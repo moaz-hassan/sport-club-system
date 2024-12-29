@@ -42,7 +42,6 @@ const Profile = () => {
       itemBought: "One-time Event Ticket",
     },
   ];
-
   const navigate = useNavigate();
   useEffect(() => {
     console.log(getUserDataFromCookies());
@@ -56,17 +55,11 @@ const Profile = () => {
   const handleEditClick = () => {
     setIsEditing(true);
   };
-  function LogOut() {
-    clearEncryptedId();
-    clearUserDataFromCookies();
-    alert("Logged out successfully!");
-    navigate("/");
-    store.dispatch({ type: "resObj", payload: {} });
-  }
+
   const handleUpdateClick = () => {
     apiReq("api/EditUserData", "POST", {
-      id: getDecryptedId(),
-      userName: name,
+      user_id: getDecryptedId(),
+      user_name: name,
       number: phone,
       address: "",
       password: password,
@@ -144,9 +137,9 @@ const Profile = () => {
       </div>
 
       {!isEditing ? (
-        <button onClick={handleEditClick}>Edit</button>
+        <button onClick={()=>{handleEditClick()}}>Edit</button>
       ) : (
-        <button onClick={handleUpdateClick}>Update</button>
+        <button onClick={()=>{handleUpdateClick()}}>Update</button>
       )}
 
       <div className="payment-history">

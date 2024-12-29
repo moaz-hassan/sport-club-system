@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { FiMenu, FiUser, FiLogOut } from "react-icons/fi";
-import logo from "../../assets/4843042_ball_game_play_sport_tennis_icon.png";
+import logo from "../../../public/4843042_ball_game_play_sport_tennis_icon.jpg";
 import "./admin-dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -36,9 +36,9 @@ function DashboardNav({ setAsideShow, asideShow }) {
   function LogOut() {
     clearEncryptedId();
     clearUserDataFromCookies();
+    store.dispatch({ type: "resObj", payload: {} });
     alert("Logged out successfully!");
     navigate("/");
-    store.dispatch({ type: "resObj", payload: {} });
   }
 
   return (

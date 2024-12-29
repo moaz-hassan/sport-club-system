@@ -27,7 +27,7 @@ function ResetPassword() {
 
   const handleRequestCode = async () => {
     try {
-      await ApiReq("api/request-otp", "POST", { email: email });
+      await ApiReq("api/request-otp", "POST",null, { email: email });
       console.log(store.getState());
       
     } catch (error) {

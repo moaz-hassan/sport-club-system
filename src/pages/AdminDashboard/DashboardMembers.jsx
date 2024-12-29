@@ -5,6 +5,7 @@ import DynamicForm from "../../components/DynamicForm";
 import ExportExcelSheet from "../../components/ExportExcelSheet";
 import { Link } from "react-router-dom";
 import ApiReq from "../../hooks/apiReq";
+import axios from "axios";
 
 function DashboardMembers({ memberView }) {
   const [members, setMembers] = useState({});
@@ -109,7 +110,18 @@ function DashboardMembers({ memberView }) {
             </button>
             <ExportExcelSheet
               FileName="Members"
-              RowsObject={members}
+              RowsObject={members?.data?.map((member) => ({
+                id: member.Member_ID,
+                name: member.Member_Name,
+                email: member.Member_Email,
+                phoneNumber: member.Member_phone,
+                subscriptionStatus:
+                  member.Member_Subscription_state === null
+                    ? "Free"
+                    : member.Member_Subscription_state,
+                role: member.Member_Role,
+                status: member.Member_status,
+              }))}
               HeaderRowObject={HeaderRowObject}
             />
           </div>
@@ -190,15 +202,21 @@ function DashboardMembers({ memberView }) {
                       {" "}
                       <button
                         onClick={() => {
-                          ApiReq("api/edit_person_data", "POST", {
-                            member_id: member.Member_ID,
-                            user_name: member.Member_Name,
-                            number: member.Member_phone,
-                            birth_date: member.Member_BirthDate,
-                            email: member.Member_Email,
-                            member_role: member.Member_Role,
-                            member_status: "inactive",
-                          });
+                          console.log(member.Member_ID);
+                          axios({
+                            method: "POST",
+                            url: `https://elkhazzansc.pythonanywhere.com/api/bann_person`,
+                            data: { member_id: member.Member_ID },
+                          })
+                            .then((response) => {
+                              console.log(response);
+                            })
+                            .catch((error) => {
+                              console.error(
+                                "Error occurred:",
+                                error.response?.data || error.message
+                              );
+                            });
                         }}
                       >
                         Block
@@ -207,22 +225,47 @@ function DashboardMembers({ memberView }) {
                   ) : (
                     <>
                       {" "}
-                      <button>Active</button>
+                      <button
+                        onClick={() => {
+                          console.log(member.Member_ID);
+                          axios({
+                            method: "POST",
+                            url: `https://elkhazzansc.pythonanywhere.com/api/unbann_person`,
+                            data: { member_id: member.Member_ID },
+                          })
+                            .then((response) => {
+                              console.log(response);
+                            })
+                            .catch((error) => {
+                              console.error(
+                                "Error occurred:",
+                                error.response?.data || error.message
+                              );
+                            });
+                        }}
+                      >
+                        Active
+                      </button>
                     </>
                   )}
                 </td>
                 <td>
-                  <select
-                    className="actions-select"
-                    onChange={(e) =>
-                      handleMenuAction(member.id, e.target.value)
-                    }
+                  {member.Member_Role !=="admin"?<button
+                    value="makeAdmin"
+                    onClick={() => {
+                      ApiReq("api/edit_person_data", "POST", null, {
+                        member_id: member.Member_ID,
+                        user_name: member.Member_Name,
+                        number: member.Member_phone,
+                        birth_date: member.Member_BirthDate,
+                        email: member.Member_Email,
+                        member_role: "admin",
+                      });
+                    }}
                   >
-                    {/* <option value="">Select Action</option> */}
-                    <option value="makeAdmin">Make Admin</option>
-                    {/* <option value="block">Block</option> */}
-                    <option value="makeCoach">Make Coach</option>
-                  </select>
+                    Make Admin
+                  </button>:<span>Already admin</span>}
+                  {}
                 </td>
               </tr>
             ))}
@@ -231,6 +274,7 @@ function DashboardMembers({ memberView }) {
       </div>
       {addMember === true ? (
         <DynamicForm
+          status={addMember}
           setStatus={setAddMember}
           endPoint={"api/add_person"}
           formType="addMember"

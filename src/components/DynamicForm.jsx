@@ -2,20 +2,20 @@
 import { useState, useEffect } from "react";
 import ApiReq from "../hooks/apiReq";
 
-function DynamicForm({ formType, endPoint, setStatus }) {
+function DynamicForm({ formType, endPoint, setStatus ,status}) {
   const [formData, setFormData] = useState({});
   const [isFormValid, setIsFormValid] = useState(false); // State to manage button enabled/disabled
 
   const addTeamFields = [
-    { name: "team_name", placeholder: "Team Name", type: "text", required: true },
-    { name: "team_type", placeholder: "Team ID", type: "text", required: true },
+    { name: "Team_name", placeholder: "Team Name", type: "text", required: true },
+    { name: "Team_type", placeholder: "Team type", type: "text", required: true },
   ];
   const addMatchFields = [
-    { name: "match_FTeam", placeholder: "Team 1", type: "text", required: true },
-    { name: "match_STeam", placeholder: "Team 2", type: "text", required: true },
+    { name: "match_team1", placeholder: "Team 1", type: "text", required: true },
+    { name: "match_team2", placeholder: "Team 2", type: "text", required: true },
     { name: "match_date", placeholder: "Match Date", type: "date", required: true },
     { name: "match_start_time", placeholder: "Match Time", type: "time", required: true },
-    { name: "match_stadium", placeholder: "Location", type: "text", required: true },
+    { name: "match_location", placeholder: "Location", type: "text", required: true },
     { name: "match_champoin", placeholder: "Champion", type: "text", required: true },
   ];
   const addMemberFields = [
@@ -28,32 +28,28 @@ function DynamicForm({ formType, endPoint, setStatus }) {
   ];
 
   const addPlayerFields = [
-    { name: "name", placeholder: "Player Name", type: "text", required: true },
+    { name: "userName", placeholder: "Player Name", type: "text", required: true },
+    { name: "Role", placeholder: "Role", type: "text", required: true },
+    { name: "email", placeholder: "Email", type: "email", required: true },
+    { name: "number", placeholder: "Phone", type: "tel", required: true },
+    { name: "birthDate", placeholder: "Birth Date", type: "date", required: true },
+    { name: "password", placeholder: "Password", type: "password", required: true },
+    { name: "team_id", placeholder: "Team ID", type: "text", required: true }, // New field
+    { name: "teammember_position", placeholder: "Position", type: "text", required: true }, // New field
+    { name: "teammember_status", placeholder: "Status", type: "text", required: true }, // New field
   ];
 
   const addSubscriptionPlanFields = [
-    { name: "planName", placeholder: "Plan Name", type: "text", required: true },
-    { name: "price", placeholder: "Price", type: "number", required: true },
-    { name: "type", placeholder: "Type", type: "text", required: true },
+    { name: "Subscription_Name", placeholder: "Plan Name", type: "text", required: true },
+    { name: "Subscription_Amount", placeholder: "Price", type: "number", required: true },
+    { name: "Subscription_Plan_type", placeholder: "Type", type: "text", required: true },
   ];
-
-  // // Function to send data to the API
-  // function apiReq(api, object) {
-  //   axios({
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     method: "POST",
-  //     url: api,
-  //     data: JSON.stringify(object),
-  //   }).catch((error) => console.log(error.message));
-  // }
 
   const getFormFields = () => {
     switch (formType) {
       case "addTeam":
         return addTeamFields;
-        case "addMatch":
+      case "addMatch":
         return addMatchFields;
       case "addMember":
         return addMemberFields;
@@ -61,12 +57,12 @@ function DynamicForm({ formType, endPoint, setStatus }) {
         return addPlayerFields;
       case "addSubscriptionPlan":
         return addSubscriptionPlanFields;
-        case "editSubscriptionPlan":
-        return editSubscriptionPlan;
       default:
         return [];
     }
   };
+
+  const formFields = getFormFields();
 
   // Handle input change
   const handleInputChange = (event) => {
@@ -76,31 +72,31 @@ function DynamicForm({ formType, endPoint, setStatus }) {
 
   // Check if the form is valid (all required fields are filled)
   useEffect(() => {
-    const isValid = getFormFields().every((field) => {
-      return field.required ? formData[field.name]?.trim() !== "" : true;
-    });
+    const isValid = formFields.every((field) =>
+      field.required ? formData[field.name]?.trim() !== "" : true
+    );
     setIsFormValid(isValid);
   }, [formData]);
-console.log(formData);
 
+  console.log(formData);
+  
   // Handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    ApiReq(endPoint,"POST",formFields);
+    // Send formData directly to the API
+    ApiReq(endPoint, "POST", null, formData);
   };
 
-  const formFields = getFormFields();
-
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="modal-overlay" style={{overflow:"auto"}}>
+      <div className="modal-content" style={{overflow:"auto",marginTop:"220px"}}>
         <h3>
           {formType === "addTeam" && "Add New Team"}
           {formType === "addMember" && "Add New Member"}
           {formType === "addSubscriptionPlan" && "Add New Subscription Plan"}
         </h3>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{overflow:"auto"}}>
           {formFields.map((field) => (
             <div key={field.name} className="form-group">
               <label htmlFor={field.name}>{field.placeholder}</label>
@@ -120,7 +116,6 @@ console.log(formData);
             <button
               type="submit"
               className="modal-save-btn"
-              onClick={handleSubmit}
               disabled={!isFormValid} // Disable button if form is invalid
             >
               Add
@@ -128,7 +123,7 @@ console.log(formData);
             <button
               type="button"
               onClick={() => {
-                setStatus(false);
+                setStatus(!status);
               }}
               className="modal-cancel-btn"
             >

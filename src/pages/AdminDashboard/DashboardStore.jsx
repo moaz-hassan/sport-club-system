@@ -7,21 +7,14 @@ import { Link } from "react-router-dom";
 import ApiReq from "../../hooks/apiReq";
 import axios from "axios";
 
-function DashboardPlayers({ memberView }) {
-  const [players, setPlayers] = useState([]);
-  const [filteredPlayers, setFilteredPlayers] = useState([]);
+function DashboardStore({ memberView }) {
+  const [members, setMembers] = useState({});
 
   useEffect(() => {
-    ApiReq("api/Get_users", "GET", setPlayers);
+    ApiReq("api/get_items", "GET", setMembers);
   }, []);
 
-  useEffect(() => {
-    if (players.data) {
-      setFilteredPlayers(
-        players.data.filter((p) => p.Member_Role === "Player")
-      );
-    }
-  }, [players]);
+  console.log(members);
 
   const [searchSelect, setSearchSelect] = useState("id");
   const [addMember, setAddMember] = useState(false);
@@ -29,6 +22,10 @@ function DashboardPlayers({ memberView }) {
   const HeaderRowObject = [
     { header: "Member Id", key: "id", width: 10 },
     { header: "Member Name", key: "name", width: 25 },
+    { header: "Email", key: "email", width: 30 },
+    { header: "Phone Number", key: "phoneNumber", width: 20 },
+    { header: "Subscription Status", key: "subscriptionStatus", width: 20 },
+    { header: "Role", key: "role", width: 15 },
     { header: "Status", key: "status", width: 15 },
   ];
 
@@ -46,7 +43,7 @@ function DashboardPlayers({ memberView }) {
   function SearchFunc(event) {
     const searchInput = event.target;
     const SearchElements = document.querySelectorAll(
-      ".dashboard-members-table tbody tr .dashboard-search-element"
+      `${event.target} tbody tr .dashboard-search-element`
     );
     const searchValue = searchInput.value;
     for (let i = 0; i < SearchElements.length; i++) {
@@ -62,18 +59,12 @@ function DashboardPlayers({ memberView }) {
     }
   }
 
-  const handleMenuAction = (memberId, action) => {
-    console.log(`Action: ${action} for Member ID: ${memberId}`);
-  };
-
   return (
     <div
       className="dashboard-members-wrapper"
       style={memberView !== false ? { margin: "0" } : null}
     >
-      <h2 style={memberView !== false ? { marginBottom: "30px" } : null}>
-        Players
-      </h2>
+      <h2>Members</h2>
       <div className="dashboard-members-header">
         <div className="search-div">
           <input
@@ -92,12 +83,17 @@ function DashboardPlayers({ memberView }) {
           >
             <option value="id">Id</option>
             <option value="name">Name</option>
+            <option value="email">Email</option>
+            <option value="phone-number">Phone Number</option>
+            <option value="subscription-status">Subscription Status</option>
+            <option value="role">Role</option>
             <option value="status">Status</option>
           </select>
         </div>
         {memberView === true && (
-          <Link to="/admin-dashboard/players">See more</Link>
+          <Link to="/admin-dashboard/members">See more</Link>
         )}
+
         {memberView === false && (
           <div className="dashboard-members-controls">
             <button
@@ -106,11 +102,22 @@ function DashboardPlayers({ memberView }) {
                 setAddMember(true);
               }}
             >
-              Add Player
+              Add Member
             </button>
             <ExportExcelSheet
-              FileName="Players"
-              RowsObject={filteredPlayers}
+              FileName="Members"
+              RowsObject={members?.data?.map((member) => ({
+                id: member.Member_ID,
+                name: member.Member_Name,
+                email: member.Member_Email,
+                phoneNumber: member.Member_phone,
+                subscriptionStatus:
+                  member.Member_Subscription_state === null
+                    ? "Free"
+                    : member.Member_Subscription_state,
+                role: member.Member_Role,
+                status: member.Member_status,
+              }))}
               HeaderRowObject={HeaderRowObject}
             />
           </div>
@@ -124,12 +131,14 @@ function DashboardPlayers({ memberView }) {
               <th>Member Name</th>
               <th>Email</th>
               <th>Phone Number</th>
+              <th>Subscription Status</th>
               <th>Role</th>
               <th>Status</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
-            {filteredPlayers?.map((member) => (
+            {members?.data?.map((member) => (
               <tr key={member.Member_ID}>
                 <td
                   className={
@@ -163,63 +172,41 @@ function DashboardPlayers({ memberView }) {
                 </td>
                 <td
                   className={
+                    searchSelect === "subscription-status"
+                      ? "dashboard-search-element"
+                      : null
+                  }
+                >
+                  {member.Member_Subscription_state === null && "Free"}
+                </td>
+                <td
+                  className={
                     searchSelect === "role" ? "dashboard-search-element" : null
                   }
                 >
                   {member.Member_Role}
                 </td>
-                <td
-                  className={
-                    searchSelect === "status"
-                      ? "dashboard-search-element"
-                      : null
-                  }
-                >
-                  {member.Member_status === "Active" ? (
+                <td>
+                  {member.Member_Role !== "admin" ? (
                     <button
+                      value="makeAdmin"
                       onClick={() => {
-                        console.log(member.Member_ID);
-                        axios({
-                          method: "POST",
-                          url: `https://elkhazzansc.pythonanywhere.com/api/bann_person`,
-                          data: { member_id: member.Member_ID },
-                        })
-                          .then((response) => {
-                            console.log(response);
-                          })
-                          .catch((error) => {
-                            console.error(
-                              "Error occurred:",
-                              error.response?.data || error.message
-                            );
-                          });
+                        ApiReq("api/edit_person_data", "POST", null, {
+                          member_id: member.Member_ID,
+                          user_name: member.Member_Name,
+                          number: member.Member_phone,
+                          birth_date: member.Member_BirthDate,
+                          email: member.Member_Email,
+                          member_role: "admin",
+                        });
                       }}
                     >
-                      Block
+                      Make Admin
                     </button>
                   ) : (
-                    <button
-                      onClick={() => {
-                        console.log(member.Member_ID);
-                        axios({
-                          method: "POST",
-                          url: `https://elkhazzansc.pythonanywhere.com/api/unbann_person`,
-                          data: { member_id: member.Member_ID },
-                        })
-                          .then((response) => {
-                            console.log(response);
-                          })
-                          .catch((error) => {
-                            console.error(
-                              "Error occurred:",
-                              error.response?.data || error.message
-                            );
-                          });
-                      }}
-                    >
-                      Active
-                    </button>
+                    <span>Already admin</span>
                   )}
+                  {}
                 </td>
               </tr>
             ))}
@@ -230,12 +217,12 @@ function DashboardPlayers({ memberView }) {
         <DynamicForm
           status={addMember}
           setStatus={setAddMember}
-          endPoint="api/add_person"
-          formType="addPlayer"
+          endPoint={"api/add_person"}
+          formType="addMember"
         />
       ) : null}
     </div>
   );
 }
 
-export default DashboardPlayers;
+export default DashboardStore;

@@ -156,7 +156,7 @@ function DashboardMatches() {
         </table>
       </div>
       {addMatch === true ? (
-        <DynamicForm setStatus={setAddMatch} endPoint={"api/add_match"} formType="addMatch" />
+        <DynamicForm status={addMatch} setStatus={setAddMatch} endPoint={"api/add_match"} formType="addMatch" />
       ) : null}
     </div>
   );

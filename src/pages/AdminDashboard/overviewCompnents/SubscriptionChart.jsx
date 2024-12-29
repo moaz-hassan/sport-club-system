@@ -19,7 +19,7 @@ const SubscriptionChart = () => {
     datasets: [
       {
         label: 'Subscriptions',
-        data: [65, 59, 80, 82, 55, 54, 40], // Replace these numbers with your data
+        data: [2, 2, 1, 5, 7, 4, 10], // Replace these numbers with your data
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)', // Red
           'rgba(255, 159, 64, 0.2)', // Orange

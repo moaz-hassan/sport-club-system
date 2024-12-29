@@ -20,7 +20,6 @@ function DashboardTeams() {
     ApiReq("api/Get_teams", "GET", setTeams);
   }, []);
 
-
   // Handle search select dropdown changes
   function SelectOnChange(event) {
     document.querySelector(".dashboard-teams-search-bar").value = "";
@@ -108,7 +107,9 @@ function DashboardTeams() {
                   </td>
                   <td
                     className={
-                      searchSelect === "name" ? "dashboard-search-element" : null
+                      searchSelect === "name"
+                        ? "dashboard-search-element"
+                        : null
                     }
                   >
                     {team.Team_Name}
@@ -133,7 +134,12 @@ function DashboardTeams() {
         </table>
       </div>
       {addTeam && (
-        <DynamicForm setStatus={setAddTeam} api="api/Add_team" formType="addTeam" />
+        <DynamicForm
+          setStatus={setAddTeam}
+          endPoint="api/add_team"
+          formType="addTeam"
+          status={addTeam}
+        />
       )}
     </div>
   );

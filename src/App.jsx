@@ -13,11 +13,15 @@ import ProductDetailsPage from "./pages/productDetails/ProductDetails";
 import CheckoutPage from "./pages/Checkout-page/CheckoutPage";
 import MatchDetails from "./pages/match-details/MatchDetails";
 import { getUserDataFromCookies } from "./utils/storageUtils";
+import store from "./components/store";
 
 function App() {
-  const isAdmin = getUserDataFromCookies()?.Member_Role === "admin";
+  console.log(store.getState().resObj.data?.Member_Role);
+  
+  const isAdmin = getUserDataFromCookies()?.Member_Role === "admin" || store.getState().resObj.data?.Member_Role==="admin";
   const isLogin = getUserDataFromCookies()?.Member_Role === "Member" || "admin";
-
+  console.log(isAdmin);
+  
   const adminRoutes = [
     "/admin-dashboard/overview",
     "/admin-dashboard/teams",
@@ -26,6 +30,7 @@ function App() {
     "/admin-dashboard/players",
     "/admin-dashboard/subscriptions",
     "/admin-dashboard/events",
+    "/admin-dashboard/store",
   ];
 
   return (

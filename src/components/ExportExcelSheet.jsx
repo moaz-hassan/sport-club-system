@@ -8,11 +8,16 @@ function ExportExcelSheet({ FileName, RowsObject, HeaderRowObject }) {
     const worksheet = workbook.addWorksheet(FileName);
 
     // Add header row
-    worksheet.columns = HeaderRowObject;
+    worksheet.columns = HeaderRowObject.map((header) => ({
+      header: header.header,
+      key: header.key,
+      width: header.width || 15,
+    }));
 
     // Add rows for each team
-    RowsObject.forEach((team) => {
-      worksheet.addRow(team);
+    RowsObject.forEach((row) => {
+      const rowData = HeaderRowObject.map((header) => row[header.key]);
+      worksheet.addRow(rowData);
     });
 
     // Export the Excel file
@@ -24,15 +29,12 @@ function ExportExcelSheet({ FileName, RowsObject, HeaderRowObject }) {
     link.download = `${FileName}.xlsx`;
     link.click();
   };
+
   return (
-    <button
-      className="export-exel-sheet-btn"
-      onClick={() => {
-        exportToExcel(FileName, RowsObject, HeaderRowObject);
-      }}
-    >
+    <button className="export-exel-sheet-btn" onClick={exportToExcel}>
       Export Sheet
     </button>
   );
 }
+
 export default ExportExcelSheet;

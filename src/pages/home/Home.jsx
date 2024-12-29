@@ -10,11 +10,14 @@ import "./home.css";
 import News from "../../components/News";
 import MatchesComponent from "../../components/MatchesComponent";
 import {
+  clearUserDataFromCookies,
   getDecryptedId,
+  getUserDataFromCookies,
   storeUserDataInCookies,
 } from "../../utils/storageUtils";
 import axios from "axios";
 import { useState } from "react";
+import store from "../../components/store";
 // import { useState } from "react";
 
 function HomePage() {
@@ -33,10 +36,11 @@ function HomePage() {
         console.error("Error occurred:", error.response?.data || error.message);
       });
   }
-  if (getDecryptedId()) {
+  if (store.getState().resObj?.data?.status === "Success") {
     getUserInfo();
   }
-
+  // getUserDataFromCookies()
+// clearUserDataFromCookies()
   return (
     <>
       <Navbar render={render} setRender={setRender}/>

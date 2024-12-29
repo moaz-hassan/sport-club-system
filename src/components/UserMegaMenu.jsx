@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import {
   clearEncryptedId,
   clearUserDataFromCookies,
-} from "../utils/storageUtils"; 
+} from "../utils/storageUtils";
 import { useState } from "react";
 
 const UserMegaMenu = ({ render, setRender }) => {

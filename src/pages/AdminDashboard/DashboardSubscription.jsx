@@ -125,8 +125,9 @@ function DashboardMembers() {
 
       {addMember && (
         <DynamicForm
+        status={addMember}
           setStatus={setAddMember}
-          api="api/add_subscription_plan"
+          endPoint="api/add_subscription_plane"
           formType="addSubscriptionPlan"
         />
       )}

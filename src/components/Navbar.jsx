@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/4843042_ball_game_play_sport_tennis_icon.png";
+import logo from "../../public/4843042_ball_game_play_sport_tennis_icon.jpg";
 import { useState } from "react";
 import FlowDiv from "./FlowDiv";
 import UserMegaMenu from "./UserMegaMenu";
@@ -20,6 +20,8 @@ function Navbar({ render, setRender }) {
       setShowAside(true);
     }
   }
+console.log(getUserDataFromCookies());
+console.log(store.getState().resObj);
 
   return (
     <>
@@ -207,7 +209,7 @@ function Navbar({ render, setRender }) {
             </Link>
           </li>
         </ul>
-        {store.getState().resObj.data || getUserDataFromCookies()? (
+        {store.getState().resObj.data || getUserDataFromCookies() !==null? (
           <UserMegaMenu render={render} setRender={setRender} />
         ) : (
           <div className="auth-btns">

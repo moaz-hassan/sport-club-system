@@ -8,7 +8,10 @@ const SECRET_KEY = "d7f#9Y2!@kL$3pZ8G&w1Q$X#bH*R9oT!";
 export function storeEncryptedId(userId) {
   // Encrypt the key and value
   const encryptedKey = CryptoJS.AES.encrypt("userId", SECRET_KEY).toString();
-  const encryptedValue = CryptoJS.AES.encrypt(userId.toString(), SECRET_KEY).toString();
+  const encryptedValue = CryptoJS.AES.encrypt(
+    userId.toString(),
+    SECRET_KEY
+  ).toString();
 
   // Store in session storage
   sessionStorage.setItem(encryptedKey, encryptedValue);
@@ -19,7 +22,9 @@ export function getDecryptedId() {
   // Find the encrypted key
   const encryptedKey = Object.keys(sessionStorage).find((key) => {
     try {
-      const decryptedKey = CryptoJS.AES.decrypt(key, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+      const decryptedKey = CryptoJS.AES.decrypt(key, SECRET_KEY).toString(
+        CryptoJS.enc.Utf8
+      );
       return decryptedKey === "userId";
     } catch {
       return false;
@@ -33,7 +38,10 @@ export function getDecryptedId() {
   // Decrypt the value
   const encryptedValue = sessionStorage.getItem(encryptedKey);
   try {
-    const decryptedValue = CryptoJS.AES.decrypt(encryptedValue, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+    const decryptedValue = CryptoJS.AES.decrypt(
+      encryptedValue,
+      SECRET_KEY
+    ).toString(CryptoJS.enc.Utf8);
     return decryptedValue || null;
   } catch {
     return null; // Decryption failed
@@ -45,7 +53,9 @@ export function clearEncryptedId() {
   // Find the encrypted key
   const encryptedKey = Object.keys(sessionStorage).find((key) => {
     try {
-      const decryptedKey = CryptoJS.AES.decrypt(key, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+      const decryptedKey = CryptoJS.AES.decrypt(key, SECRET_KEY).toString(
+        CryptoJS.enc.Utf8
+      );
       return decryptedKey === "userId";
     } catch {
       return false;
@@ -62,10 +72,16 @@ export function storeUserDataInCookies(userData, expiresInDays = 7) {
   try {
     // Stringify the data and encrypt it
     const stringifiedData = JSON.stringify(userData);
-    const encryptedData = CryptoJS.AES.encrypt(stringifiedData, SECRET_KEY).toString();
+    const encryptedData = CryptoJS.AES.encrypt(
+      stringifiedData,
+      SECRET_KEY
+    ).toString();
 
     // Store encrypted data in a cookie
-    Cookies.set("user_data", encryptedData, { expires: expiresInDays, secure: true });
+    Cookies.set("user_data", encryptedData, {
+      expires: expiresInDays,
+      secure: true,
+    });
 
     // console.log("User data stored successfully in cookies.");
   } catch (error) {
@@ -93,7 +109,9 @@ export function getUserDataFromCookies() {
 // Function to clear user data from cookies on logout
 export function clearUserDataFromCookies() {
   try {
-    Cookies.remove("user_data");
+    // Remove the "user_data" cookie
+    Cookies.remove("user_data", { secure: true, sameSite: "Strict" });
+
     console.log("User data cleared from cookies.");
   } catch (error) {
     console.error("Error clearing user data from cookies:", error);

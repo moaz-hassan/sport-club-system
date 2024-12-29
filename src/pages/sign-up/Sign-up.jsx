@@ -24,7 +24,7 @@ function SignUp() {
 
   function signUpRequest() {
     console.log(store.getState());
-    if(store.getState().resObj.status === "Success") {
+    if (store.getState().resObj.status === "Success") {
       ApiReq("api/signup", "POST", {
         userName: userName,
         password: password,
@@ -36,7 +36,7 @@ function SignUp() {
   }
   const handleRequestCode = async () => {
     try {
-      await ApiReq("api/request-otp", "POST", { email: email });
+      await ApiReq("api/request-otp", "POST", null, { email: email });
     } catch (error) {
       console.error("Error occurred while requesting OTP:", error);
     }
@@ -44,7 +44,10 @@ function SignUp() {
 
   const handleVerifyCode = async () => {
     try {
-      await ApiReq("api/verify-otp", "POST", { email: email, otpCode: otpCode});
+      await ApiReq("api/verify-otp", "POST", null, {
+        email: email,
+        otpCode: otpCode,
+      });
     } catch (error) {
       console.error("Error occurred while requesting OTP:", error);
     }

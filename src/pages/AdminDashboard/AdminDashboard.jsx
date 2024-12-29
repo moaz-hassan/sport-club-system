@@ -10,6 +10,7 @@ import DashboardMatches from "./DashboardMatches";
 import "./admin-dashboard.css";
 import Profile from "./Profile";
 import DashboardPlayers from "./Players";
+import DashboardStore from "./DashboardStore";
 function AdminDashboard() {
   const Location = useLocation();
 
@@ -37,6 +38,8 @@ function AdminDashboard() {
             <DashboardTeams />
           ) : Location.pathname === "/admin-dashboard/matches" ? (
             <DashboardMatches />
+          ) : Location.pathname === "/admin-dashboard/store" ? (
+            <DashboardStore />
           ) : null}
         </div>
       </div>

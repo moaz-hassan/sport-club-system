@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 import { LuPanelLeftClose } from "react-icons/lu";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/4843042_ball_game_play_sport_tennis_icon.png";
+import logo from "../../../public/4843042_ball_game_play_sport_tennis_icon.jpg";
 import "./admin-dashboard.css";
 import { useEffect } from "react";
+import { getUserDataFromCookies } from "../../utils/storageUtils";
+import store from "../../components/store";
 
 function DashboardAside({ asideShow, setAsideShow }) {
   const location = useLocation();
@@ -19,7 +21,9 @@ function DashboardAside({ asideShow, setAsideShow }) {
     }
     calculatePageWidth();
   }, [setAsideShow]);
-
+  const isAdmin =
+    getUserDataFromCookies()?.Member_Role === "admin" ||
+    store.getState().resObj.data?.Member_Role === "admin";
   return (
     <aside
       className="admin-dashboard-aside"
@@ -43,60 +47,73 @@ function DashboardAside({ asideShow, setAsideShow }) {
         >
           <Link to="/admin-dashboard/profile">Profile</Link>
         </li>
-        <li
-          style={
-            location.pathname === "/admin-dashboard/overview"
-              ? { backgroundColor: "#4CAF50" }
-              : null
-          }
-        >
-          <Link to="/admin-dashboard/overview">Overview</Link>
-        </li>
-        <li
-          style={
-            location.pathname === "/admin-dashboard/players"
-              ? { backgroundColor: "#4CAF50" }
-              : null
-          }
-        >
-          <Link to="/admin-dashboard/players">Players</Link>
-        </li>
-        <li
-          style={
-            location.pathname === "/admin-dashboard/members"
-              ? { backgroundColor: "#4CAF50" }
-              : null
-          }
-        >
-          <Link to="/admin-dashboard/members">Members</Link>
-        </li>
-        <li
-          style={
-            location.pathname === "/admin-dashboard/subscriptions"
-              ? { backgroundColor: "#4CAF50" }
-              : null
-          }
-        >
-          <Link to="/admin-dashboard/subscriptions">Subscriptions</Link>
-        </li>
-        <li
-          style={
-            location.pathname === "/admin-dashboard/teams"
-              ? { backgroundColor: "#4CAF50" }
-              : null
-          }
-        >
-          <Link to="/admin-dashboard/teams">Teams</Link>
-        </li>
-        <li
-          style={
-            location.pathname === "/admin-dashboard/matches"
-              ? { backgroundColor: "#4CAF50" }
-              : null
-          }
-        >
-          <Link to="/admin-dashboard/matches">Matches</Link>
-        </li>
+        {isAdmin && (
+          <>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/overview"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/overview">Overview</Link>
+            </li>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/players"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/players">Players</Link>
+            </li>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/members"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/members">Members</Link>
+            </li>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/subscriptions"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/subscriptions">Subscriptions</Link>
+            </li>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/teams"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/teams">Teams</Link>
+            </li>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/matches"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/matches">Matches</Link>
+            </li>
+            <li
+              style={
+                location.pathname === "/admin-dashboard/store"
+                  ? { backgroundColor: "#4CAF50" }
+                  : null
+              }
+            >
+              <Link to="/admin-dashboard/store">Store</Link>
+            </li>
+          </>
+        )}
       </ul>
     </aside>
   );

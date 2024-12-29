@@ -29,10 +29,11 @@ function Login() {
   };
 
   function logInRequest() {
-    ApiReq("api/login", "POST", {
+    ApiReq("api/login", "POST",null, {
       username: userName,
       Password: password,
     },navigate);
+    
   }
   return (
     <>

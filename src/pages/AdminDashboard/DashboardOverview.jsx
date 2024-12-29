@@ -9,18 +9,18 @@ function DashboardOverview() {
       <div className="top-section">
         <div>
           <span>Total Revenue</span>
-          <p>100$</p>
+          <p>1226$</p>
         </div>
         <div>
           <span>Total Subscriptions</span>
-          <p>50</p>
+          <p>31</p>
         </div>
         <div>
           <span>Total Members</span>
-          <p>200</p>
+          <p>36</p>
         </div>
         <div>
-          <span>Total Members</span>
+          <span>Number of teams</span>
           <p>200</p>
         </div>
       </div>
